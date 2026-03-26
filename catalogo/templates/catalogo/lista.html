@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPIs - Catálogo</title>
+</head>
+<body>
+    <h1>Países en la Base de Datos</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Código</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pais in paises %}
+            <tr>
+                <td>{{ pais.id_pais }}</td>
+                <td>{{ pais.nombre_pais }}</td>
+                <td>{{ pais.codigo_pais }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No hay países registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Clietnes en la Base de Datos</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Código</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.id_cliente }}</td>
+                <td>{{ cliente.nombre_cliente }}</td>
+                <td>{{ cliente.vertical }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No hay países registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

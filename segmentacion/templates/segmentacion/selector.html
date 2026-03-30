@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Selector - KPIs</title>
+</head>
+<body>
+    <h2>Hola, {{ user.nombre_completo }}</h2>
+    <p>Selecciona una asignación para comenzar:</p>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>País</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+            <tbody>
+                {% for asig in asignaciones %}
+                <tr>
+                    <td>{{ asig.cliente.nombre_cliente }}</td>
+                    <td>{{ asig.pais.nombre_pais }}</td>
+                    <td>
+                        <a href="{% url 'cargar_operacion' asig.cliente_id asig.pais_id %}">
+                            Ingresar Datos
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No tienes asignaciones disponibles.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+    <br>
+    <a href="{% url 'logout' %}">Cerrar Sesión</a>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<nav style="background: #333; color: white; padding: 1rem; display: flex; justify-content: space-between;">
+    <div>
+        <strong>KPIs Gerencia</strong> | 
+        <a href="{% url 'home' %}" style="color: white;">Inicio</a>
+    </div>
+    <div>
+        {% if user.is_authenticated %}
+            <span>Hola, {{ user.nombre_completo }}</span>
+            {% if user.es_administrador_global %}
+                | <a href="{% url 'lista_usuarios' %}" style="color: #ffc107;">Usuarios</a>
+            {% endif %}
+            | <a href="{% url 'logout' %}" style="color: #ff6b6b;">Cerrar Sesión</a>
+        {% endif %}
+    </div>
+</nav>

@@ -1,10 +1,26 @@
+# catalogo/views.py
 from django.shortcuts import render
-from .models import Pais, Cliente
+from django.contrib.auth.decorators import login_required
+from segmentacion.models import UsuarioClientePais
 
+#@login_required(login_url='login')
 def lista_paises(request):
-    # Obtenemos todos los países de la base de datos
-    paises = Pais.objects.all()
-    clientes = Cliente.objects.all()
+    usuario_actual = request.user 
+
+    if usuario_actual.es_administrador_global:
+        # El administrador ve TODOS los países directamente de la tabla Pais
+        from catalogo.models import Pais
+        paises_para_mostrar = Pais.objects.all()
+        es_administrador_global = True
+    else:
+        # El usuario normal solo ve lo que tiene asignado
+        paises_para_mostrar = UsuarioClientePais.objects.filter(
+            usuario=usuario_actual, 
+            estado_activo=True
+        )
+        es_administrador_global = False
+
     return render(request, 'catalogo/lista.html', {
-        'paises': paises,
-        'clientes':clientes})
+        'lista': paises_para_mostrar,
+        'es_admin': es_administrador_global
+    })

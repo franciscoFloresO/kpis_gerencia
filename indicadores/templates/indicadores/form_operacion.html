@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Carga de Operación Mensual{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Carga de Operación Mensual</h1>
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="section-title">Contexto del Periodo</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>País:</label>
+                {{ form.id_pais }}
+                {{ form.id_pais.errors }}
+            </div>
+            <div class="form-group">
+                <label>Cliente:</label>
+                {{ form.id_cliente }}
+                {{ form.id_cliente.errors }}
+            </div>
+            <div class="form-group">
+                <label>Mes:</label>
+                {{ form.mes }}
+            </div>
+            <div class="form-group">
+                <label>Año:</label>
+                {{ form.anio }}
+            </div>
+        </div>
+
+        <div class="section-title">Headcount (Promedios)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Agentes:</label>
+                {{ form.agentes_promedio }}
+            </div>
+            <div class="form-group">
+                <label>Supervisores:</label>
+                {{ form.supervisores_promedio }}
+            </div>
+            <div class="form-group">
+                <label>Backoffice:</label>
+                {{ form.backoffice_promedio }}
+            </div>
+        </div>
+
+        <div class="section-title">Volumetría y Digital</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Tickets Humano:</label>
+                {{ form.tickets_humano }}
+            </div>
+            <div class="form-group">
+                <label>Híbridos WhatsApp/BI:</label>
+                {{ form.hibridos_whatsapp_bi }}
+            </div>
+            <div class="form-group">
+                <label>% Deflexión Digital:</label>
+                {{ form.porcentaje_digital_deflexion }}
+            </div>
+        </div>
+
+        <div class="section-title">Datos Económicos (USD)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Ingresos Totales:</label>
+                {{ form.ingresos_totales_usd }}
+            </div>
+            <div class="form-group">
+                <label>Costos Totales:</label>
+                {{ form.costos_totales_usd }}
+            </div>
+            <div class="form-group">
+                <label>Costo por Ticket:</label>
+                {{ form.costo_ticket_usd }}
+            </div>
+            <div class="form-group">
+                <label>Moneda:</label>
+                {{ form.codigo_moneda }}
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button type="submit" class="btn-save">Guardar Operación</button>
+            <a href="{% url 'home' %}" class="btn-cancel">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

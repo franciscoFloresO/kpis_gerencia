@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - KPIs Gerencia{% endblock %}
+
+{% block content %}
+<h1>Bienvenido, {{ user.nombre_completo }}</h1>
+<p>¿Qué información deseas cargar hoy?</p>
+
+<div style="display: flex; gap: 20px;">
+    <a href="{% url 'selector_contexto' %}" style="padding: 20px; border: 1px solid black; text-decoration: none;">
+        📂 Cargar Operación Mensual
+    </a>
+    <a href="#" style="padding: 20px; border: 1px solid black; text-decoration: none;">
+        📄 Cargar Contractual Mensual
+    </a>
+</div>
+
+{% if user.es_administrador_global %}
+    <hr>
+    <div style="background-color: #e3f2fd; padding: 15px; border-radius: 8px; border: 1px solid #bbdefb; margin-top: 20px;">
+        <h3>Panel de Administración</h3>
+        <p>Tienes permisos para gestionar el equipo.</p>
+        <a href="{% url 'lista_usuarios' %}" style="display: inline-block; background: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">
+            👥 Gestionar Usuarios
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -16,9 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from segmentacion.views import login_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',login_view,name='root_login'),
     path('catalogo/', include('catalogo.urls')),
     path('segmentacion/',include('segmentacion.urls')),
+    path('indicadores/',include('indicadores.urls')),
 ]

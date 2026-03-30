@@ -60,7 +60,7 @@ ROOT_URLCONF = 'kpis_gerencia.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,6 +118,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'segmentacion.backends.UsuarioAppBackend', 
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 

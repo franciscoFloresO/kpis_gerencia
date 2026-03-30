@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestión de Usuarios - KPIs{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Gestión de Usuarios</h2>
+    <a href="{% url 'crear_usuario' %}" class="btn">➕ Nuevo Usuario</a>
+    
+    <table border="1" style="width:100%; margin-top:20px; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Nombre Completo</th>
+                <th>Correo</th>
+                <th>Estado</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td>{{ u.id_usuario }}</td>
+                <td>{{ u.usuario_login }}</td>
+                <td>{{ u.nombre_completo }}</td>
+                <td>{{ u.correo_corporativo }}</td>
+                <td>
+                    {% if u.estado_activo %}
+                        <span style="color: green;">● Activo</span>
+                    {% else %}
+                        <span style="color: red;">○ Inactivo</span>
+                    {% endif %}
+                </td>
+                <td>{% if u.es_administrador_global %}Admin{% else %}Usuario{% endif %}</td>
+                <td>
+                    <a href="{% url 'editar_usuario' u.id_usuario %}">Edit</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center;">No hay usuarios registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="form-container">
-    <h2>{% if editando %}Editar{% else %}Registro de{% endif %} Usuario</h2>
+    <h2>{% if editando %}Editar Usuario: {{ usuario_target.usuario_login }}{% else %}Registro de Nuevo Usuario{% endif %}</h2>
     
     <form method="POST">
         {% csrf_token %}
@@ -31,10 +31,21 @@
         {% endif %}
 
         <button type="submit" class="btn-submit">
-            {% if editando %}Actualizar{% else %}Crear{% endif %} Usuario
+            {% if editando %}Actualizar Datos{% else %}Crear y Continuar{% endif %}
         </button>
     </form>
 
-    <a href="{% url 'home' %}" class="back-link">← Volver al Panel</a>
+    {% if editando %}
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        <div style="text-align: center;">
+            <p style="color: #666; font-size: 0.9em;">¿Necesitas cambiar sus permisos?</p>
+            <a href="{% url 'gestionar_asignaciones' usuario_target.id_usuario %}" 
+               style="display: inline-block; background: #e3f2fd; color: #007bff; padding: 10px 15px; text-decoration: none; border-radius: 5px; border: 1px solid #bbdefb; font-weight: bold;">
+               🔑 Gestionar Países y Clientes →
+            </a>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'lista_usuarios' %}" class="back-link">← Volver al Listado de Usuarios</a>
 </div>
 {% endblock %}

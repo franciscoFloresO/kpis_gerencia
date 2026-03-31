@@ -1,0 +1,41 @@
+{% if messages %}
+    <div id="messages-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+        {% for message in messages %}
+            <div class="alert-toast {{ message.tags }}" 
+                style="background: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'error' %}#dc3545{% else %}#17a2b8{% endif %};
+                        color: white; padding: 15px 20px; margin-bottom: 10px; border-radius: 8px; 
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-family: sans-serif;
+                        display: flex; justify-content: space-between; align-items: center;
+                        animation: slideIn 0.5s ease-out;">
+                <span>{{ message }}</span>
+                <button onclick="this.parentElement.remove()" style="background:none; border:none; color:white; cursor:pointer; font-size: 20px; margin-left: 15px;">&times;</button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <style>
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .fade-out {
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+    </style>
+
+    <script>
+        // Auto-eliminar mensajes después de 4 segundos
+        setTimeout(function() {
+            const container = document.getElementById('messages-container');
+            if (container) {
+                const alerts = container.getElementsByClassName('alert-toast');
+                for (let alert of alerts) {
+                    alert.classList.add('fade-out');
+                    setTimeout(() => alert.remove(), 500); // Dar tiempo a la animación
+                }
+            }
+        }, 4000);
+    </script>
+{% endif %}

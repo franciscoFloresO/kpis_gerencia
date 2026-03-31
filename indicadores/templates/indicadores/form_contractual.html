@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Carga Contractual - {{ cliente.nombre_cliente }}{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    
+    <div style="text-align: center; margin-bottom: 25px;">
+        <h2 style="margin-bottom: 5px;">📄 Carga de Metas Contractuales</h2>
+        <span style="background: #e3f2fd; color: #007bff; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
+            {{ cliente.nombre_cliente }} — {{ pais.nombre_pais }}
+        </span>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <fieldset style="border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <legend style="padding: 0 10px; color: #666; font-weight: bold;">📅 Periodo del Reporte</legend>
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <label>{{ form.mes.label }}</label>
+                    {{ form.mes }}
+                </div>
+                <div style="flex: 1;">
+                    <label>{{ form.anio.label }}</label>
+                    {{ form.anio }}
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset style="border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <legend style="padding: 0 10px; color: #666; font-weight: bold;">📈 Objetivos de Calidad (%)</legend>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                <div><label>EPA Objetivo</label>{{ form.epa_objetivo }}</div>
+                <div><label>FCR Objetivo</label>{{ form.fcr_objetivo }}</div>
+                <div><label>SLA Objetivo</label>{{ form.sla_objetivo }}</div>
+                <div><label>Abandono Máximo</label>{{ form.abandono_objetivo }}</div>
+            </div>
+        </fieldset>
+
+        <fieldset style="border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <legend style="padding: 0 10px; color: #666; font-weight: bold;">⏱️ Tiempos y Operación</legend>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                <div><label>ASA (Seg)</label>{{ form.asa_segundos_objetivo }}</div>
+                <div><label>TMO (Min)</label>{{ form.tmo_minutos_objetivo }}</div>
+                <div><label>ACW (Seg)</label>{{ form.acw_segundos_objetivo }}</div>
+                <div><label>Agentes</label>{{ form.agentes_objetivo }}</div>
+                <div><label>Supervisores</label>{{ form.supervisores_objetivo }}</div>
+                <div><label>Backoffice</label>{{ form.backoffice_objetivo }}</div>
+            </div>
+        </fieldset>
+
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label>{{ form.descripcion_servicio.label }}</label>
+            {{ form.descripcion_servicio }}
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label>{{ form.cobertura_horaria_multas.label }}</label>
+            {{ form.cobertura_horaria_multas }}
+        </div>
+
+        {{ form.id_pais }}
+        {{ form.id_cliente }}
+
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn-submit" style="flex: 2; background: #007bff; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                💾 Guardar Configuración Contractual
+            </button>
+            <a href="{% url 'home' %}" style="flex: 1; text-align: center; background: #6c757d; color: white; padding: 12px; border-radius: 5px; text-decoration: none;">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #444; }
+    input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    fieldset label { font-size: 0.85em; color: #555; }
+</style>
+{% endblock %}

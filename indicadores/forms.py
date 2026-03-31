@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import OperacionMensual
+from .models import OperacionMensual, ContractualMensual
 # ... (tus otros imports)
 
 class OperacionMensualForm(forms.ModelForm):
@@ -41,4 +41,45 @@ class OperacionMensualForm(forms.ModelForm):
         # Recomponemos la fecha al día 1 de ese mes
         # Esto es lo que se guardará en la columna 'fecha_periodo' de SQL Server
         cleaned_data['fecha_periodo'] = datetime.date(anio, mes, 1)
+        return cleaned_data
+    
+
+class ContractualMensualForm(forms.ModelForm):
+    MESES = [
+        (1, 'Enero'), (2, 'Febrero'), (3, 'Marzo'), (4, 'Abril'),
+        (5, 'Mayo'), (6, 'Junio'), (7, 'Julio'), (8, 'Agosto'),
+        (9, 'Septiembre'), (10, 'Octubre'), (11, 'Noviembre'), (12, 'Diciembre')
+    ]
+    anio_actual = datetime.date.today().year
+    ANIOS = [(str(y), str(y)) for y in range(anio_actual - 2, anio_actual + 3)]
+
+    mes = forms.ChoiceField(choices=MESES, label="Mes del Periodo")
+    anio = forms.ChoiceField(choices=ANIOS, label="Año del Periodo")
+
+    class Meta:
+        model = ContractualMensual
+        fields = [
+            'id_pais', 'id_cliente', 'mes', 'anio',
+            'epa_objetivo', 'fcr_objetivo', 'sla_objetivo', 'abandono_objetivo',
+            'asa_segundos_objetivo', 'tmo_minutos_objetivo', 'acw_segundos_objetivo',
+            'agentes_objetivo', 'supervisores_objetivo', 'backoffice_objetivo',
+            'descripcion_servicio', 'cobertura_horaria_multas'
+        ]
+        widgets = {
+            'descripcion_servicio': forms.Textarea(attrs={'rows': 2, 'class': 'form-control'}),
+            'cobertura_horaria_multas': forms.Textarea(attrs={'rows': 2, 'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Campos ocultos porque vienen de la URL
+        self.fields['id_pais'].widget = forms.HiddenInput()
+        self.fields['id_cliente'].widget = forms.HiddenInput()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        mes = cleaned_data.get('mes')
+        anio = cleaned_data.get('anio')
+        if mes and anio:
+            cleaned_data['fecha_periodo'] = datetime.date(int(anio), int(mes), 1)
         return cleaned_data

@@ -35,9 +35,8 @@ class UsuarioApp(models.Model):
         return f"{self.usuario_login} ({self.nombre_completo})"
 
 class UsuarioClientePais(models.Model):
-    id_usuario_cliente_pais = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True,db_column='id_usuario_cliente_pais')
     
-    # Quitamos el prefijo 'id_' del nombre del campo de Django
     usuario = models.ForeignKey(UsuarioApp, on_delete=models.CASCADE, db_column='id_usuario')
     cliente = models.ForeignKey('catalogo.Cliente', on_delete=models.CASCADE, db_column='id_cliente')
     pais = models.ForeignKey('catalogo.Pais', on_delete=models.CASCADE, db_column='id_pais')

@@ -35,12 +35,28 @@ class ContractualMensual(models.Model):
     id_pais = models.ForeignKey(Pais, on_delete=models.CASCADE, db_column='id_pais')
     fecha_periodo = models.DateField()
     
+    # Objetivos Porcentuales
     epa_objetivo = models.DecimalField(max_digits=5, decimal_places=2)
     fcr_objetivo = models.DecimalField(max_digits=5, decimal_places=2)
     sla_objetivo = models.DecimalField(max_digits=5, decimal_places=2)
     abandono_objetivo = models.DecimalField(max_digits=5, decimal_places=2)
     
+    # Nuevos campos detectados en SQL
+    asa_segundos_objetivo = models.IntegerField(null=True, blank=True)
+    tmo_minutos_objetivo = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    acw_segundos_objetivo = models.IntegerField(null=True, blank=True)
+    
+    # Headcount objetivo
+    agentes_objetivo = models.IntegerField(null=True, blank=True)
+    supervisores_objetivo = models.IntegerField(null=True, blank=True)
+    backoffice_objetivo = models.IntegerField(null=True, blank=True)
+    
     descripcion_servicio = models.TextField()
+    cobertura_horaria_multas = models.TextField(null=True, blank=True)
+
+    # Auditoría
+    creado_por = models.ForeignKey(UsuarioApp, on_delete=models.PROTECT, db_column='creado_por', related_name='contractuales_creados')
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         managed = False

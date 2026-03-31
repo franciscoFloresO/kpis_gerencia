@@ -4,25 +4,61 @@
 
 {% block content %}
 <h1>Bienvenido, {{ user.nombre_completo }}</h1>
-<p>¿Qué información deseas cargar hoy?</p>
+<p>Seleccione el tipo de reporte e indique el contexto para continuar.</p>
 
-<div style="display: flex; gap: 20px;">
-    <a href="{% url 'selector_contexto' %}" style="padding: 20px; border: 1px solid black; text-decoration: none;">
-        📂 Cargar Operación Mensual
-    </a>
-    <a href="#" style="padding: 20px; border: 1px solid black; text-decoration: none;">
-        📄 Cargar Contractual Mensual
-    </a>
+<div class="accordion-container">
+    
+    <details style="border: 1px solid #ccc; margin-bottom: 10px; border-radius: 5px;">
+        <summary style="padding: 15px; cursor: pointer; background: #f8f9fa; font-weight: bold;">
+            📂 Cargar Operación Mensual
+        </summary>
+        <div style="padding: 15px; border-top: 1px solid #ccc;">
+            <p>Seleccione la asignación correspondiente:</p>
+            <form action="{% url 'redireccionar_carga' 'operacion' %}" method="POST">
+                {% csrf_token %}
+                <select name="asignacion_id" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+                    <option value="">-- Seleccione País y Cliente --</option>
+                    {% for asig in asignaciones %}
+                        <option value="{{ asig.pais.id_pais }}-{{ asig.cliente.id_cliente }}">
+                            {{ asig.pais.nombre_pais }} - {{ asig.cliente.nombre_cliente }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer;">
+                    Ir al Formulario de Operación →
+                </button>
+            </form>
+        </div>
+    </details>
+
+    <details style="border: 1px solid #ccc; margin-bottom: 10px; border-radius: 5px;">
+        <summary style="padding: 15px; cursor: pointer; background: #f8f9fa; font-weight: bold;">
+            📄 Cargar Contractual Mensual
+        </summary>
+        <div style="padding: 15px; border-top: 1px solid #ccc;">
+            <p>Seleccione la asignación correspondiente:</p>
+            <form action="{% url 'redireccionar_carga' 'contractual' %}" method="POST">
+                {% csrf_token %}
+                <select name="asignacion_id" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+                    <option value="">-- Seleccione País y Cliente --</option>
+                    {% for asig in asignaciones %}
+                        <option value="{{ asig.pais.id_pais }}-{{ asig.cliente.id_cliente }}">
+                            {{ asig.pais.nombre_pais }} - {{ asig.cliente.nombre_cliente }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" style="background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer;">
+                    Ir al Formulario Contractual →
+                </button>
+            </form>
+        </div>
+    </details>
+
 </div>
 
 {% if user.es_administrador_global %}
-    <hr>
-    <div style="background-color: #e3f2fd; padding: 15px; border-radius: 8px; border: 1px solid #bbdefb; margin-top: 20px;">
-        <h3>Panel de Administración</h3>
-        <p>Tienes permisos para gestionar el equipo.</p>
-        <a href="{% url 'lista_usuarios' %}" style="display: inline-block; background: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">
-            👥 Gestionar Usuarios
-        </a>
+    <div style="margin-top: 30px; padding: 15px; background: #fff3cd; border-radius: 5px; border: 1px solid #ffeeba;">
+        <strong>Admin:</strong> <a href="{% url 'lista_usuarios' %}">Gestionar Usuarios</a>
     </div>
 {% endif %}
 {% endblock %}

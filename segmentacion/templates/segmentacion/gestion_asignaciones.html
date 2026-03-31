@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Asignaciones - {{ usuario_target.nombre_completo }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Gestionar Permisos: {{ usuario_target.nombre_completo }}</h2>
+    <p>Usuario: <strong>{{ usuario_target.usuario_login }}</strong></p>
+
+    <hr>
+
+    <h3>Añadir Nueva Asignación</h3>
+    <form method="POST" style="display: flex; gap: 15px; align-items: flex-end; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+        {% csrf_token %}
+        <div>
+            {{ form.pais.label_tag }}<br>
+            {{ form.pais }}
+        </div>
+        <div>
+            {{ form.cliente.label_tag }}<br>
+            {{ form.cliente }}
+        </div>
+        <button type="submit" style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            ＋ Asignar
+        </button>
+    </form>
+
+    <h3 style="margin-top: 30px;">Asignaciones Actuales</h3>
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #eee;">
+                <th>País</th>
+                <th>Cliente</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in asignaciones %}
+            <tr>
+                <td>{{ a.pais.nombre_pais }}</td>
+                <td>{{ a.cliente.nombre_cliente }}</td>
+                <td>
+                    <a href="{% url 'eliminar_asignacion' a.id %}" style="color: red;" onclick="return confirm('¿Seguro?')">Quitar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="text-align: center; padding: 10px;">Este usuario no tiene países o clientes asignados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="{% url 'lista_usuarios' %}">← Volver al Listado de Usuarios</a>
+</div>
+{% endblock %}

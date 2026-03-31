@@ -34,8 +34,10 @@
                     {% endif %}
                 </td>
                 <td>{% if u.es_administrador_global %}Admin{% else %}Usuario{% endif %}</td>
-                <td>
-                    <a href="{% url 'editar_usuario' u.id_usuario %}">Edit</a>
+                <td style="padding: 10px;">
+                    <a href="{% url 'editar_usuario' u.id_usuario %}" title="Editar Datos" style="text-decoration: none; margin-right: 10px;">✏️</a>
+                    
+                    <a href="{% url 'gestionar_asignaciones' u.id_usuario %}" title="Gestionar Permisos" style="text-decoration: none;">🔑</a>
                 </td>
             </tr>
             {% empty %}

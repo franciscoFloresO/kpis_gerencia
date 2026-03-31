@@ -1,5 +1,5 @@
 from django import forms
-from .models import UsuarioApp
+from .models import UsuarioApp, Pais, Cliente, UsuarioClientePais
 from django.contrib.auth.hashers import make_password
 
 class UsuarioAppForm(forms.ModelForm):
@@ -72,3 +72,33 @@ class UsuarioAppForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+    
+class AsignacionForm(forms.ModelForm):
+    class Meta:
+        model = UsuarioClientePais
+        fields = ['pais', 'cliente']
+
+    def __init__(self, *args, **kwargs):
+        # Extraemos el usuario que pasaremos desde la vista
+        self.usuario = kwargs.pop('usuario', None)
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        pais = cleaned_data.get("pais")
+        cliente = cleaned_data.get("cliente")
+
+        # Validamos si ya existe la combinación para este usuario
+        if self.usuario and pais and cliente:
+            existe = UsuarioClientePais.objects.filter(
+                usuario=self.usuario,
+                pais=pais,
+                cliente=cliente
+            ).exists()
+            
+            if existe:
+                raise forms.ValidationError(
+                    f"Error: {pais} - {cliente} ya se encuentra asignado a este usuario."
+                )
+        
+        return cleaned_data

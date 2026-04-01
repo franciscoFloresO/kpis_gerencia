@@ -24,6 +24,9 @@ class OperacionMensual(models.Model):
     creado_por = models.ForeignKey(UsuarioApp, on_delete=models.PROTECT, db_column='creado_por', related_name='operaciones_creadas')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
+    modificado_por = models.ForeignKey(UsuarioApp,on_delete=models.PROTECT,db_column='modificado_por',related_name='operaciones_modificadas',null=True,blank=True)
+    fecha_modificacion = models.DateTimeField(auto_now=True, null=True,blank=True)
+
     class Meta:
         managed = False
         db_table = 'kpi.OperacionMensual'
@@ -57,6 +60,9 @@ class ContractualMensual(models.Model):
     # Auditoría
     creado_por = models.ForeignKey(UsuarioApp, on_delete=models.PROTECT, db_column='creado_por', related_name='contractuales_creados')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    modificado_por = models.ForeignKey(UsuarioApp,on_delete=models.PROTECT,db_column='modificado_por',related_name='contractuales_modificados',null=True,blank=True)
+    fecha_contrato_modificacion = models.DateField(db_column='fecha_contrato_modificacion')
 
     class Meta:
         managed = False

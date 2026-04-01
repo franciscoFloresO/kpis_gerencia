@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Historial de Metas Contractuales{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 1200px;"> <div class="form-header">
+        <h2>📋 Historial de Metas Contractuales</h2>
+        <div class="form-badge">
+            {% if user.es_administrador_global %}
+                Vista: Administrador Global
+            {% else %}
+                Vista: Mis Metas Cargadas
+            {% endif %}
+        </div>
+    </div>
+
+    <div style="overflow-x: auto; margin-top: 20px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+            <thead>
+                <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6; text-align: left;">
+                    <th style="padding: 12px;">Periodo</th>
+                    <th style="padding: 12px;">Cliente / País</th>
+                    <th style="padding: 12px; text-align: center;">SLA Obj.</th>
+                    <th style="padding: 12px; text-align: center;">EPA Obj.</th>
+                    <th style="padding: 12px; text-align: center;">FCR Obj.</th>
+                    <th style="padding: 12px;">Gestión</th>
+                    <th style="padding: 12px; text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in contractuales %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px;">
+                        <strong>{{ c.fecha_periodo|date:"F Y" }}</strong>
+                    </td>
+                    <td style="padding: 12px;">
+                        {{ c.id_cliente.nombre_cliente }}<br>
+                        <small style="color: #666;">{{ c.id_pais.nombre_pais }}</small>
+                    </td>
+                    <td style="padding: 12px; text-align: center;">{{ c.sla_objetivo }}%</td>
+                    <td style="padding: 12px; text-align: center;">{{ c.epa_objetivo }}%</td>
+                    <td style="padding: 12px; text-align: center;">{{ c.fcr_objetivo }}%</td>
+                    <td style="padding: 12px;">
+                        <div style="font-size: 0.8em; line-height: 1.2;">
+                            <span>👤 {{ c.creado_por.nombre_completo }}</span><br>
+                            {% if c.modificado_por %}
+                                <span style="color: #007bff;">✏️ {{ c.modificado_por.nombre_completo }}</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td style="padding: 12px; text-align: center;">
+                        <a href="{% url 'editar_contractual' pk=c.id_contractual_mensual %}" 
+                           style="background: #007bff; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.85em;">
+                            Editar
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="padding: 30px; text-align: center; color: #999;">
+                        No hay metas contractuales registradas.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px;">
+        <a href="{% url 'home' %}" class="btn-secondary" style="text-decoration: none; display: inline-block; padding: 10px 20px;">
+            ⬅ Volver al Inicio
+        </a>
+    </div>
+</div>
+{% endblock %}

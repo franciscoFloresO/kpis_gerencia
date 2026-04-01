@@ -1,0 +1,103 @@
+/* Contenedor principal del formulario */
+.form-card {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Cabecera y distintivos */
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-badge {
+    background: #e3f2fd;
+    color: #007bff;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+    display: inline-block;
+}
+
+/* Secciones agrupadas (Fieldsets) */
+.form-section {
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.form-section legend {
+    padding: 0 10px;
+    color: #666;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+/* Grillas y Layout */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.form-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+/* Campos de entrada */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #444;
+    font-size: 0.9em;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* Botones y Acciones */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    flex: 2;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-secondary {
+    flex: 1;
+    text-align: center;
+    background: #6c757d;
+    color: white;
+    padding: 12px;
+    border-radius: 5px;
+    text-decoration: none;
+}

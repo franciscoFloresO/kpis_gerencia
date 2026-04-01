@@ -1,0 +1,108 @@
+.home-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.home-header {
+    margin-bottom: 2rem;
+}
+
+.home-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #212529;
+}
+
+/* Tarjeta Base */
+.action-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Sección Highlight (Gestión) */
+.action-card.highlight {
+    background-color: #f8f9fa;
+    border: none;
+}
+
+/* Encabezados de Tarjetas de Carga */
+.card-header-accent {
+    padding: 1rem 1.5rem;
+    color: #333;
+    font-size: 0.9em;
+    border-bottom: 1px solid #eee;
+}
+
+.op-accent { border-left: 5px solid #28a745; background: #fdfdfd; }
+.con-accent { border-left: 5px solid #007bff; background: #fdfdfd; }
+
+/* Botones y Grupos */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.btn-action {
+    padding: 12px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s, background 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-action:hover { transform: translateY(-2px); }
+
+.btn-grey { background: #6c757d; color: white; }
+.btn-dark { background: #495057; color: white; }
+.btn-success { background: #28a745; color: white; }
+.btn-blue { background: #007bff; color: white; }
+
+/* Formularios Internos */
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+select {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.card-note {
+    font-size: 0.85em;
+    color: #6c757d;
+    margin-top: 1rem;
+}
+
+/* Panel Admin */
+.admin-panel {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.admin-panel a {
+    color: #856404;
+    text-decoration: underline;
+}

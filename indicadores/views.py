@@ -9,7 +9,6 @@ from segmentacion.models import Cliente, Pais
 
 @login_required(login_url='login')
 def cargar_operacion(request, id_cliente, id_pais):
-    # Obtenemos los objetos para validar que existen y para usarlos en el template
     cliente_obj = get_object_or_404(Cliente, pk=id_cliente)
     pais_obj = get_object_or_404(Pais, pk=id_pais)
 
@@ -17,8 +16,6 @@ def cargar_operacion(request, id_cliente, id_pais):
         form = OperacionMensualForm(request.POST, user=request.user)
         if form.is_valid():
             operacion = form.save(commit=False)
-            
-            # Asignamos los objetos de FK que ya validamos arriba
             operacion.id_cliente = cliente_obj
             operacion.id_pais = pais_obj
             
@@ -28,16 +25,17 @@ def cargar_operacion(request, id_cliente, id_pais):
             
             operacion.save()
             
-            # Mensaje de éxito para el Toast
             messages.success(request, f"Operación de {cliente_obj.nombre_cliente} ({pais_obj.nombre_pais}) cargada con éxito.")
             return redirect('home')
         else:
-            # Si el formulario falla (ej: combinación duplicada en clean), mandamos el error al Toast
-            for error in form.non_field_errors():
-                messages.error(request, error)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error en {field}: {error}")
     else:
-        # Iniciamos el formulario vacío
-        form = OperacionMensualForm(user=request.user)
+        form = OperacionMensualForm(user=request.user, initial={
+            'id_cliente': cliente_obj,
+            'id_pais': pais_obj
+        })
     
     return render(request, 'indicadores/form_operacion.html', {
         'form': form,

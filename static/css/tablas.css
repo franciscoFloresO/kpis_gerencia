@@ -1,0 +1,112 @@
+/* Contenedor y Tarjeta */
+.table-container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.table-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    padding: 1.5rem;
+}
+
+/* Encabezado del Listado */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.table-header h2 { margin: 0; color: #333; }
+.table-header p { margin: 5px 0 0; color: #888; font-size: 0.9em; }
+
+/* Botón Nuevo Usuario */
+.btn-add {
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.btn-add:hover { background: #218838; }
+
+/* Tabla Estilizada */
+.table-responsive { overflow-x: auto; }
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.custom-table th {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.custom-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f2f2f2;
+    vertical-align: middle;
+    font-size: 0.95em;
+}
+
+.custom-table tr:hover { background-color: #fcfcfc; }
+
+/* Badges y Tags */
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+.status-active { background: #d4edda; color: #155724; }
+.status-inactive { background: #f8d7da; color: #721c24; }
+
+.role-tag {
+    font-size: 0.85em;
+    color: #495057;
+    background: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+.role-tag.admin { background: #fff3cd; color: #856404; font-weight: bold; }
+
+/* Acciones */
+.action-buttons { display: flex; gap: 10px; justify-content: center; }
+
+.btn-icon {
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+}
+.btn-icon:hover { transform: scale(1.2); }
+
+.text-center { text-align: center; }
+.text-muted { color: #adb5bd; }
+
+.table-footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.btn-back {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+.btn-back:hover { text-decoration: underline; }

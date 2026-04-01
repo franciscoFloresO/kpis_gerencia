@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Países - KPIs{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/tablas.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="table-card">
+        <header class="table-header">
+            <div>
+                <h2>🌍 Catálogo de Países</h2>
+                <p>Configuración de territorios para la carga de indicadores.</p>
+            </div>
+            <a href="{% url 'crear_pais' %}" class="btn-add">
+                ➕ Nuevo País
+            </a>
+        </header>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>País</th>
+                        <th>Código ISO</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in paises %}
+                    <tr>
+                        <td><strong>{{ p.nombre_pais }}</strong></td>
+                        <td><span class="role-tag">{{ p.codigo_pais }}</span></td>
+                        <td class="text-center">
+                            {% if p.estado_activo %}
+                                <span class="badge status-active">Activo</span>
+                            {% else %}
+                                <span class="badge status-inactive">Inactivo</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'editar_pais' p.id_pais %}" class="btn-icon" title="Editar">
+                                ✏️
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No hay países registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="table-footer">
+            <a href="{% url 'home' %}" class="btn-back">← Volver al Inicio</a>
+        </footer>
+    </div>
+</div>
+{% endblock %}

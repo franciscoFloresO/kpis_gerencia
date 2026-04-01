@@ -35,11 +35,20 @@ def logout_view(request):
 
 def crear_usuario(request):
     if request.method == 'POST':
+        print(request.POST)
         form = UsuarioAppForm(request.POST)
         if form.is_valid():
             nuevo_usuario = form.save() 
             messages.success(request, f"Usuario {nuevo_usuario.usuario_login} creado. Ahora asigna sus permisos.")
             return redirect('gestionar_asignaciones', id_usuario=nuevo_usuario.id_usuario)
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    label = form.fields[field].label if field in form.fields else field
+                    messages.error(request, f"Error en {label}: {error}")
+            for error in form.non_field_errors():
+                messages.error(request, f"Error: {error}")
+
     else:
         form = UsuarioAppForm()
     return render(request, 'segmentacion/crear_usuario.html', {'form': form})

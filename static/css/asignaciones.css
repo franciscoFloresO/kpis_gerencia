@@ -1,0 +1,52 @@
+/* Formulario en una línea */
+.inline-assignment-form {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.inline-assignment-form .form-group {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 0; /* Quitamos el margen inferior para alinear con el botón */
+}
+
+/* Estilo especial para la sección de añadir */
+.highlight-add {
+    background-color: #f8f9fa;
+    border: 1px dashed #ced4da;
+}
+
+.btn-add-inline {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 40px; /* Ajuste para que coincida con la altura de los inputs */
+    transition: background 0.3s;
+}
+
+.btn-add-inline:hover {
+    background-color: #218838;
+}
+
+/* Botón de eliminar en la tabla */
+.btn-delete {
+    color: #dc3545;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 5px 10px;
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.btn-delete:hover {
+    background-color: #dc3545;
+    color: white;
+}

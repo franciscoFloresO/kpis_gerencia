@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if es_edicion %}Editar País{% else %}Nuevo País{% endif %} - KPIs Gerencia
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/estilos_formularios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 650px;">
+    
+    <header class="form-header">
+        <div class="header-icon">🌍</div>
+        <h2>
+            {% if es_edicion %}
+                Editar País: {{ pais.nombre_pais }}
+            {% else %}
+                Registro de Nuevo País
+            {% endif %}
+        </h2>
+        <div class="form-badge">Catálogo de Territorios</div>
+    </header>
+
+    <form method="POST" class="main-form">
+        {% csrf_token %}
+
+        <fieldset class="form-section">
+            <legend>📍 Información General</legend>
+            
+            <div class="form-group">
+                <label>Nombre del País:</label>
+                {{ form.nombre_pais }}
+            </div>
+
+            <div class="form-group">
+                <label>Código ISO (Ej: CL, AR, PE):</label>
+                {{ form.codigo_pais }}
+                <p style="font-size: 0.8em; color: #666; margin-top: 5px;">
+                    * Use el código de 2 letras para reportes internacionales.
+                </p>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend>⚙️ Configuración</legend>
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px; background: #fdfdfd; padding: 10px; border-radius: 5px; border: 1px solid #eee;">
+                {{ form.estado_activo }}
+                <label style="margin-bottom: 0; font-weight: 600;">¿País se encuentra activo?</label>
+            </div>
+            <p style="font-size: 0.85em; color: #666; margin-top: 10px;">
+                * Si un país está inactivo, no se podrán crear nuevas asignaciones para él.
+            </p>
+        </fieldset>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">
+                💾 {% if es_edicion %}Actualizar País{% else %}Guardar País{% endif %}
+            </button>
+            <a href="{% url 'lista_paises' %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

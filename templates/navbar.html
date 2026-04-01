@@ -1,15 +1,37 @@
-<nav style="background: #333; color: white; padding: 1rem; display: flex; justify-content: space-between;">
-    <div>
-        <strong>KPIs Gerencia</strong> | 
-        <a href="{% url 'home' %}" style="color: white;">Inicio</a>
-    </div>
-    <div>
+{% load static %}
+<nav class="main-navbar">
+    <div class="nav-left">
+        <a href="{% url 'home' %}" class="nav-logo">
+            <strong>KPIs</strong> Gerencia
+        </a>
+        
         {% if user.is_authenticated %}
-            <span>Hola, {{ user.nombre_completo }}</span>
-            {% if user.es_administrador_global %}
-                | <a href="{% url 'lista_usuarios' %}" style="color: #ffc107;">Usuarios</a>
-            {% endif %}
-            | <a href="{% url 'logout' %}" style="color: #ff6b6b;">Cerrar Sesión</a>
+            <div class="nav-divider"></div>
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}" class="nav-item">🏠 Inicio</a></li>
+                <li><a href="{% url 'lista_operaciones' %}" class="nav-item">📂 Operaciones</a></li>
+                <li><a href="{% url 'lista_contractual' %}" class="nav-item">📄 Contractual</a></li>
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="nav-right">
+        {% if user.is_authenticated %}
+            <div class="user-profile">
+                <span class="user-name">👤 {{ user.nombre_completo }}</span>
+                
+                {% if user.es_administrador_global %}
+                    <a href="{% url 'lista_usuarios' %}" class="nav-item admin-link" title="Gestión de Usuarios">
+                        ⚙️ <span class="hide-mobile">Usuarios</span>
+                    </a>
+                {% endif %}
+                
+                <a href="{% url 'logout' %}" class="btn-logout">Salir</a>
+            </div>
+        {% else %}
+            <div class="nav-guest">
+                <span class="welcome-text">Bienvenido al Portal</span>
+            </div>
         {% endif %}
     </div>
 </nav>

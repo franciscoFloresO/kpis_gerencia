@@ -1,51 +1,77 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Gestión de Usuarios - KPIs{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/tablas.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2>Gestión de Usuarios</h2>
-    <a href="{% url 'crear_usuario' %}" class="btn">➕ Nuevo Usuario</a>
-    
-    <table border="1" style="width:100%; margin-top:20px; border-collapse: collapse;">
-        <thead>
-            <tr style="background-color: #f2f2f2;">
-                <th>ID</th>
-                <th>Usuario</th>
-                <th>Nombre Completo</th>
-                <th>Correo</th>
-                <th>Estado</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for u in usuarios %}
-            <tr>
-                <td>{{ u.id_usuario }}</td>
-                <td>{{ u.usuario_login }}</td>
-                <td>{{ u.nombre_completo }}</td>
-                <td>{{ u.correo_corporativo }}</td>
-                <td>
-                    {% if u.estado_activo %}
-                        <span style="color: green;">● Activo</span>
-                    {% else %}
-                        <span style="color: red;">○ Inactivo</span>
-                    {% endif %}
-                </td>
-                <td>{% if u.es_administrador_global %}Admin{% else %}Usuario{% endif %}</td>
-                <td style="padding: 10px;">
-                    <a href="{% url 'editar_usuario' u.id_usuario %}" title="Editar Datos" style="text-decoration: none; margin-right: 10px;">✏️</a>
-                    
-                    <a href="{% url 'gestionar_asignaciones' u.id_usuario %}" title="Gestionar Permisos" style="text-decoration: none;">🔑</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="7" style="text-align: center;">No hay usuarios registrados.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="table-container">
+    <div class="table-card">
+        
+        <header class="table-header">
+            <div class="header-info">
+                <h2>👥 Gestión de Usuarios</h2>
+                <p>Administre los accesos y roles del personal.</p>
+            </div>
+            <a href="{% url 'crear_usuario' %}" class="btn-add">
+                <span>➕</span> Nuevo Usuario
+            </a>
+        </header>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Nombre Completo</th>
+                        <th>Correo</th>
+                        <th>Estado</th>
+                        <th>Rol</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in usuarios %}
+                    <tr>
+                        <td><span class="text-muted">#{{ u.id_usuario }}</span></td>
+                        <td><strong>{{ u.usuario_login }}</strong></td>
+                        <td>{{ u.nombre_completo }}</td>
+                        <td>{{ u.correo_corporativo }}</td>
+                        <td>
+                            {% if u.estado_activo %}
+                                <span class="badge status-active">Activo</span>
+                            {% else %}
+                                <span class="badge status-inactive">Inactivo</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="role-tag {% if u.es_administrador_global %}admin{% endif %}">
+                                {% if u.es_administrador_global %}Admin{% else %}Usuario{% endif %}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <div class="action-buttons">
+                                <a href="{% url 'editar_usuario' u.id_usuario %}" class="btn-icon" title="Editar Datos">✏️</a>
+                                <a href="{% url 'gestionar_asignaciones' u.id_usuario %}" class="btn-icon" title="Gestionar Permisos">🔑</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4">No hay usuarios registrados en el sistema.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="table-footer">
+            <a href="{% url 'home' %}" class="btn-back">⬅ Volver al Inicio</a>
+        </footer>
+    </div>
 </div>
 {% endblock %}

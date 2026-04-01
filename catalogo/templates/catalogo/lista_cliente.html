@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Clientes - KPIs{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/tablas.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="table-card">
+        <header class="table-header">
+            <div>
+                <h2>🏢 Catálogo de Clientes</h2>
+                <p>Gestión de cuentas y verticales de negocio.</p>
+            </div>
+            <a href="{% url 'crear_cliente' %}" class="btn-add">
+                ➕ Nuevo Cliente
+            </a>
+        </header>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Vertical</th>
+                        <th>Fecha Alta</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td><strong>{{ cliente.nombre_cliente }}</strong></td>
+                        <td><span class="role-tag">{{ cliente.vertical }}</span></td>
+                        <td>{{ cliente.fecha_alta|date:"d/m/Y" }}</td>
+                        <td class="text-center">
+                            {% if cliente.estado_activo %}
+                                <span class="badge status-active">Activo</span>
+                            {% else %}
+                                <span class="badge status-inactive">Inactivo</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'editar_cliente' cliente.id_cliente %}" class="btn-icon" title="Editar">✏️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No hay clientes registrados en el sistema.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="table-footer">
+            <a href="{% url 'home' %}" class="btn-back">← Volver al Inicio</a>
+        </footer>
+    </div>
+</div>
+{% endblock %}

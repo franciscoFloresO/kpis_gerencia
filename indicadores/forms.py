@@ -17,6 +17,11 @@ class OperacionMensualForm(forms.ModelForm):
     mes = forms.ChoiceField(choices=MESES, label="Mes del Periodo")
     anio = forms.ChoiceField(choices=ANIOS, label="Año del Periodo")
 
+    porcentaje_digital_deflexion = forms.DecimalField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        label="Porcentaje Digital Deflexión"
+    )
+
     class Meta:
         model = OperacionMensual
 
@@ -31,6 +36,9 @@ class OperacionMensualForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super(OperacionMensualForm, self).__init__(*args, **kwargs)
 
+        self.fields['id_pais'].widget = forms.HiddenInput()
+        self.fields['id_cliente'].widget = forms.HiddenInput()
+
         if self.instance and self.instance.pk:
             
             self.fields['mes'].disabled = True
@@ -39,9 +47,7 @@ class OperacionMensualForm(forms.ModelForm):
             self.fields['id_cliente'].disabled = True
             self.fields['mes'].required = False
             self.fields['anio'].required = False
-            
-            self.fields['id_pais'].widget = forms.HiddenInput()
-            self.fields['id_cliente'].widget = forms.HiddenInput()
+
 
     def clean(self):
         cleaned_data = super().clean()

@@ -1,26 +1,39 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Login - KPIs Gerencia{% endblock %}
-
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
 {% block content %}
-<div class="login-container">
-    <h2>Iniciar Sesión</h2>
+<div class="login-wrapper">
+    <div class="card-login">
+        <header class="card-header">
+            <h2>🔐 Acceso al Portal</h2>
+            <span class="badge-system">KPIs Gerencia de Operaciones</span>
+        </header>
+        {% if messages %}
+            <div class="alert-container">
+                {% for message in messages %}
+                    <p class="alert-error">⚠️ {{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="POST" class="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Usuario Corporativo</label>
+                <input type="text" name="username" id="username" placeholder="Ej: fflores" required autofocus>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="error">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-        <label for="username">Usuario:</label>
-        <input type="text" name="username" id="username" required autofocus>
-        
-        <label for="password">Contraseña:</label>
-        <input type="password" name="password" id="password" required>
-        
-        <button type="submit">Entrar</button>
-    </form>
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" name="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit">Ingresar al Sistema</button>
+        </form>
+        <footer class="card-footer">
+            <p>Si olvidó sus credenciales, contacte al Administrador Global.</p>
+        </footer>
+    </div>
 </div>
 {% endblock %}

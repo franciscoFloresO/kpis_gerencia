@@ -1,51 +1,86 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Registro de Usuario{% endblock %}
+{% block title %}
+    {% if es_edicion %}Editar Usuario{% else %}Nuevo Usuario{% endif %} - KPIs
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/formularios.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <h2>{% if editando %}Editar Usuario: {{ usuario_target.usuario_login }}{% else %}Registro de Nuevo Usuario{% endif %}</h2>
-    
-    <form method="POST">
-        {% csrf_token %}
-        
-        {% for field in form %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                
-                {% if field.errors %}
-                    <ul class="error-msg">
-                        {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
+<div class="container-center">
+    <div class="form-card" style="max-width: 600px;"> <div class="form-header">
+            <div class="header-icon">👤</div>
+            <h2>
+                {% if es_edicion %}
+                    Editar Usuario: {{ form.instance.usuario_login }}
+                {% else %}
+                    Crear Nuevo Usuario
                 {% endif %}
-            </div>
-        {% endfor %}
-
-        {% if form.non_field_errors %}
-            <div class="error-msg">
-                {{ form.non_field_errors }}
-            </div>
-        {% endif %}
-
-        <button type="submit" class="btn-submit">
-            {% if editando %}Actualizar Datos{% else %}Crear y Continuar{% endif %}
-        </button>
-    </form>
-
-    {% if editando %}
-        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-        <div style="text-align: center;">
-            <p style="color: #666; font-size: 0.9em;">¿Necesitas cambiar sus permisos?</p>
-            <a href="{% url 'gestionar_asignaciones' usuario_target.id_usuario %}" 
-               style="display: inline-block; background: #e3f2fd; color: #007bff; padding: 10px 15px; text-decoration: none; border-radius: 5px; border: 1px solid #bbdefb; font-weight: bold;">
-               🔑 Gestionar Países y Clientes →
-            </a>
+            </h2>
+            <p class="text-muted">Complete los datos de acceso y perfil corporativo.</p>
         </div>
-    {% endif %}
 
-    <a href="{% url 'lista_usuarios' %}" class="back-link">← Volver al Listado de Usuarios</a>
+        <form method="POST" class="main-form">
+            {% csrf_token %}
+
+            <fieldset class="form-section">
+                <legend>🔑 Credenciales y Perfil</legend>
+                <div class="form-group">
+                    <label>Nombre de Usuario (Login):</label>
+                    {{ form.usuario_login }}
+                </div>
+                
+                <div class="form-group">
+                    <label>Nombre Completo:</label>
+                    {{ form.nombre_completo }}
+                </div>
+
+                <div class="form-group">
+                    <label>Correo Corporativo:</label>
+                    {{ form.correo_corporativo }}
+                </div>
+
+                {% if not es_edicion %}
+                <div class="form-group">
+                    <label>Contraseña Inicial:</label>
+                    {{ form.password }}
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Contraseña:</label>
+                    {{ form.password_confirm }}
+                </div>
+                {% endif %}
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>⚙️ Configuración de Cuenta</legend>
+                <div class="form-grid-2">
+                    <div class="form-check-group">
+                        <label class="checkbox-container">
+                            {{ form.estado_activo }}
+                            <span class="checkbox-label">Usuario Activo</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-check-group">
+                        <label class="checkbox-container">
+                            {{ form.es_administrador_global }}
+                            <span class="checkbox-label">Administrador Global</span>
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-save">
+                    {% if es_edicion %}💾 Actualizar Usuario{% else %}➕ Crear Usuario{% endif %}
+                </button>
+                <a href="{% url 'lista_usuarios' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

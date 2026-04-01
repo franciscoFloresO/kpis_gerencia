@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Crear Cliente - KPIs Gerencia{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/formularios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-center">
+    <div class="form-card" style="max-width: 650px;">
+        
+        <header class="form-header">
+            <h2>
+                {% if es_edicion %}
+                    ✏️ Editar Cliente: {{ cliente.nombre_cliente }}
+                {% else %}
+                    🏢 Registro de Cliente
+                {% endif %}
+            </h2>
+            <span class="form-badge">Catálogo Maestro</span>
+        </header>
+
+        <form method="POST" class="main-form">
+            {% csrf_token %}
+
+            <fieldset class="form-section">
+                <legend>📋 Información General</legend>
+                
+                <div class="form-group">
+                    <label>Nombre del Cliente:</label>
+                    {{ form.nombre_cliente }}
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Vertical de Negocio:</label>
+                        {{ form.vertical }}
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Alta:</label>
+                        {{ form.fecha_alta }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>⚙️ Configuración</legend>
+                <div class="form-check-group" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #fff; border: 1px solid #eee; border-radius: 6px;">
+                    {{ form.estado_activo }}
+                    <label style="margin: 0; font-weight: 600; color: #444;">Cliente con Estado Activo</label>
+                </div>
+                <p style="font-size: 0.85em; color: #666; margin-top: 10px;">
+                    * Los clientes inactivos no aparecerán en los selectores de carga mensual.
+                </p>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-save">💾 Guardar Cliente</button>
+                <a href="{% url 'home' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

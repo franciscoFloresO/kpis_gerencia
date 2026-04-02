@@ -83,6 +83,9 @@ class AsignacionForm(forms.ModelForm):
         self.usuario = kwargs.pop('usuario', None)
         super().__init__(*args, **kwargs)
 
+        self.fields['pais'].queryset = Pais.objects.filter(estado_activo=True).order_by('nombre_pais')
+        self.fields['cliente'].queryset = Cliente.objects.filter(estado_activo=True).order_by('nombre_cliente')
+
     def clean(self):
         cleaned_data = super().clean()
         pais = cleaned_data.get("pais")

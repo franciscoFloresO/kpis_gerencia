@@ -42,6 +42,7 @@
                 </div>
                 {{ form.id_pais }}
                 {{ form.id_cliente }}
+                {{ form.codigo_moneda }}
             </fieldset>
 
             <fieldset class="form-section">
@@ -64,7 +65,7 @@
 
             <fieldset class="form-section">
                 <legend>📈 Volumetría y Digital</legend>
-                <div class="form-grid-3">
+                <div class="form-grid-4">
                     <div class="form-group">
                         <label>Tickets Humano:</label>
                         {{ form.tickets_humano }}
@@ -74,15 +75,19 @@
                         {{ form.hibridos_whatsapp_bi }}
                     </div>
                     <div class="form-group">
-                        <label>% Deflexión Digital:</label>
-                        {{ form.porcentaje_digital_deflexion }}
+                        <label>Tickets Digitales:</label>
+                        {{ form.tickets_digital}}
+                    </div>
+                    <div class="form-group">
+                        <label>% Digitalización:</label>
+                        {{ form.porcentaje_digitalizacion }}
                     </div>
                 </div>
             </fieldset>
 
             <fieldset class="form-section">
                 <legend>💰 Datos Económicos (USD)</legend>
-                <div class="form-grid-4">
+                <div class="form-grid-3">
                     <div class="form-group">
                         <label>Ingresos Totales:</label>
                         {{ form.ingresos_totales_usd }}
@@ -94,10 +99,6 @@
                     <div class="form-group">
                         <label>Costo x Ticket:</label>
                         {{ form.costo_ticket_usd }}
-                    </div>
-                    <div class="form-group">
-                        <label>Moneda:</label>
-                        {{ form.codigo_moneda }}
                     </div>
                 </div>
             </fieldset>

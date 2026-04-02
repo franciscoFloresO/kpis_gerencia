@@ -14,7 +14,8 @@ class OperacionMensual(models.Model):
     #Volumetria
     tickets_humano = models.IntegerField()
     hibridos_whatsapp_bi = models.IntegerField()
-    porcentaje_digital_deflexion = models.DecimalField(max_digits=5, decimal_places=2)
+    porcentaje_digitalizacion = models.DecimalField(max_digits=5, decimal_places=2)
+    tickets_digital = models.IntegerField()
     #Economico
     ingresos_totales_usd = models.DecimalField(max_digits=18, decimal_places=2)
     costos_totales_usd = models.DecimalField(max_digits=18, decimal_places=2)

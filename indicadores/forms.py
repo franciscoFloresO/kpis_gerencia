@@ -17,9 +17,9 @@ class OperacionMensualForm(forms.ModelForm):
     mes = forms.ChoiceField(choices=MESES, label="Mes del Periodo")
     anio = forms.ChoiceField(choices=ANIOS, label="Año del Periodo")
 
-    porcentaje_digital_deflexion = forms.DecimalField(
+    porcentaje_digitalizacion = forms.DecimalField(
         validators=[MinValueValidator(0), MaxValueValidator(100)],
-        label="Porcentaje Digital Deflexión"
+        label="Porcentaje Digitalización"
     )
 
     class Meta:
@@ -28,7 +28,7 @@ class OperacionMensualForm(forms.ModelForm):
         fields = [
             'id_pais', 'id_cliente', 'mes', 'anio',
             'agentes_promedio', 'supervisores_promedio', 'backoffice_promedio',
-            'tickets_humano', 'hibridos_whatsapp_bi', 'porcentaje_digital_deflexion',
+            'tickets_humano', 'hibridos_whatsapp_bi', 'porcentaje_digitalizacion', 'tickets_digital',
             'ingresos_totales_usd', 'costos_totales_usd', 'costo_ticket_usd', 'codigo_moneda'
         ]
 
@@ -38,6 +38,10 @@ class OperacionMensualForm(forms.ModelForm):
 
         self.fields['id_pais'].widget = forms.HiddenInput()
         self.fields['id_cliente'].widget = forms.HiddenInput()
+        self.fields['codigo_moneda'].widget = forms.HiddenInput()
+        
+        self.fields['codigo_moneda'].initial = 'USD'
+        self.fields['codigo_moneda'].required = False
 
         if self.instance and self.instance.pk:
             
@@ -45,8 +49,11 @@ class OperacionMensualForm(forms.ModelForm):
             self.fields['anio'].disabled = True
             self.fields['id_pais'].disabled = True
             self.fields['id_cliente'].disabled = True
+            self.fields['codigo_moneda'].disabled = False
+
             self.fields['mes'].required = False
             self.fields['anio'].required = False
+
 
 
     def clean(self):
@@ -54,10 +61,29 @@ class OperacionMensualForm(forms.ModelForm):
         if self.instance and self.instance.pk:
             mes = self.instance.fecha_periodo.month
             anio = self.instance.fecha_periodo.year
+            cliente = self.instance.id_cliente
+            pais = self.instance.id_pais
         else:
             mes = int(cleaned_data.get('mes'))
             anio = int(cleaned_data.get('anio'))
+            cliente = cleaned_data.get('id_cliente')
+            pais = cleaned_data.get('id_pais')
 
+        if mes and anio and cliente and pais:
+            fecha_validar = datetime.date(int(anio), int(mes), 1)
+
+            existe = OperacionMensual.objects.filter(
+                id_cliente=cliente,
+                id_pais=pais,
+                fecha_periodo=fecha_validar
+            )
+        if self.instance.pk:
+            existe = existe.exclude(pk=self.instance.pk)
+        if existe.exists():
+            raise forms.ValidationError(
+                f"Atención: ya existe registro para {cliente}"
+                f"en {pais} correspondiente para {mes}/{anio}"
+            )
         cleaned_data['fecha_periodo'] = datetime.date(anio, mes, 1)
         return cleaned_data
     

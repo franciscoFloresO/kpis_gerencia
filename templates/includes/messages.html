@@ -33,7 +33,7 @@
                 const alerts = container.getElementsByClassName('alert-toast');
                 for (let alert of alerts) {
                     alert.classList.add('fade-out');
-                    setTimeout(() => alert.remove(), 500); // Dar tiempo a la animación
+                    setTimeout(() => alert.remove(), 1000); // Dar tiempo a la animación
                 }
             }
         }, 4000);

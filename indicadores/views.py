@@ -18,8 +18,7 @@ def cargar_operacion(request, id_cliente, id_pais):
             operacion = form.save(commit=False)
             operacion.id_cliente = cliente_obj
             operacion.id_pais = pais_obj
-            
-            # Datos adicionales
+            operacion.codigo_moneda = 'USD'
             operacion.fecha_periodo = form.cleaned_data['fecha_periodo']
             operacion.creado_por = request.user 
             
@@ -30,11 +29,16 @@ def cargar_operacion(request, id_cliente, id_pais):
         else:
             for field, errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, f"Error en {field}: {error}")
+                    if field == '__all__':
+                        messages.error(request, error)
+                    else:
+                        label = form.fields[field].label if field in form.fields else field
+                        messages.error(request, f"Error en {label}: {error}")
     else:
         form = OperacionMensualForm(user=request.user, initial={
             'id_cliente': cliente_obj,
-            'id_pais': pais_obj
+            'id_pais': pais_obj,
+            'codigo_moneda':'USD'
         })
     
     return render(request, 'indicadores/form_operacion.html', {
@@ -146,8 +150,6 @@ def lista_operaciones(request):
         'operaciones':operaciones
     })
 
-
-# indicadores/views.py
 
 @login_required(login_url='login')
 def editar_contractual(request, pk):

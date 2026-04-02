@@ -11,6 +11,10 @@ from .forms import UsuarioAppForm, AsignacionForm
 
 #AUTENTICACION
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+
     if request.method == 'POST':
         usuario = request.POST.get('username')
         clave = request.POST.get('password')
@@ -32,7 +36,7 @@ def logout_view(request):
     return redirect('login')
 
 #USUARIOS
-
+@login_required
 def crear_usuario(request):
     if request.method == 'POST':
         print(request.POST)
@@ -53,10 +57,12 @@ def crear_usuario(request):
         form = UsuarioAppForm()
     return render(request, 'segmentacion/crear_usuario.html', {'form': form})
 
+@login_required
 def lista_usuarios(request):
     usuarios = UsuarioApp.objects.all()
     return render(request, 'segmentacion/lista_usuarios.html', {'usuarios':usuarios})
 
+@login_required
 def editar_usuario(request, id_usuario):
     usuario_obj = get_object_or_404(UsuarioApp, pk=id_usuario)
     
@@ -139,10 +145,8 @@ def selector_contexto(request):
     usuario = request.user
     
     if usuario.es_administrador_global:
-        # El admin ve todas las asignaciones existentes
         asignaciones = UsuarioClientePais.objects.all()
     else:
-        # Usuario normal ve solo lo suyo
         asignaciones = UsuarioClientePais.objects.filter(usuario=usuario, estado_activo=True)
 
     return render(request, 'segmentacion/selector.html', {'asignaciones': asignaciones})

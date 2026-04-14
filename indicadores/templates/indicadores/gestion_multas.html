@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Multas{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/formularios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-center" style="display: flex; flex-direction: column; align-items: center; padding: 20px;">
+    
+    <div class="form-card" style="width: 100%; max-width: 900px; margin-bottom: 30px;">
+        <div class="form-header">
+            <div class="header-icon">⚠️</div>
+            <h2 style="margin-bottom: 5px;">Gestión de Multas</h2>
+            <div class="form-badge" style="background-color: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; display: inline-block;">
+                Módulo Administrativo
+            </div>
+            <p style="margin-top: 15px; color: #666; font-size: 0.95em;">Seleccione cliente y país para iniciar un nuevo registro</p>
+        </div>
+
+        <form action="{% url 'redireccionar_carga' 'multa' %}" method="POST" class="main-form" style="padding-top: 10px;">
+            {% csrf_token %}
+            <div style="max-width: 450px; margin: 0 auto;">
+                <div class="form-group">
+                    <select name="asignacion_id" required class="form-control" style="text-align: center; border: 1px solid #ddd; height: 45px;">
+                        <option value="">-- Seleccione Asignación --</option>
+                        {% for asig in asignaciones %}
+                            <option value="{{ asig.pais.id_pais }}-{{ asig.cliente.id_cliente }}">
+                                {{ asig.pais.nombre_pais }} — {{ asig.cliente.nombre_cliente }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button type="submit" class="btn-save" style="background-color: #e74c3c; width: 100%; max-width: 250px; height: 45px; font-weight: 600;">
+                        Ir al Formulario →
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-card" style="width: 100%; max-width: 900px;">
+        <div class="form-header" style="padding-bottom: 10px; border-bottom: 1px solid #f1f1f1; margin-bottom: 20px;">
+            <div class="header-icon" style="font-size: 1.2rem; margin-bottom: 10px;">📋</div>
+            <h3 style="color: #333;">Historial de Registros</h3>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+                <thead>
+                    <tr style="text-align: left; color: #888; border-bottom: 2px solid #f8f9fa;">
+                        <th style="padding: 12px 10px;">Periodo</th>
+                        <th style="padding: 12px 10px;">Cliente / País</th>
+                        <th style="padding: 12px 10px;">Servicio</th>
+                        <th style="padding: 12px 10px;">Monto</th>
+                        <th style="padding: 12px 10px; text-align: center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in multas %}
+                    <tr style="border-bottom: 1px solid #fafafa;">
+                        <td style="padding: 15px 10px;"><strong>{{ m.fecha_periodo|date:"M Y" }}</strong></td>
+                        <td style="padding: 15px 10px;">
+                            <span style="color: #333; font-weight: 500;">{{ m.id_cliente.nombre_cliente }}</span><br>
+                            <small style="color: #999;">{{ m.id_pais.nombre_pais }}</small>
+                        </td>
+                        <td style="padding: 15px 10px;">
+                            <span style="background: #fdf2f2; color: #c0392b; padding: 3px 8px; border-radius: 4px; font-size: 0.75em; font-weight: 600;">
+                                {{ m.servicio }}
+                            </span>
+                        </td>
+                        <td style="padding: 15px 10px; color: #e74c3c; font-weight: bold;">${{ m.monto_multa }}</td>
+                        <td style="padding: 15px 10px; text-align: center;">
+                            <a href="{% url 'editar_multa' m.id_multa %}" 
+                               style="color: #007bff; text-decoration: none; font-weight: 600; font-size: 0.85em;">
+                                Editar
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="padding: 40px; text-align: center; color: #ccc;">
+                            No hay multas registradas en el sistema.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

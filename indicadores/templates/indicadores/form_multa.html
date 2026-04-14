@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if es_edicion %}Editar Multa{% else %}Registrar Multa{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/formularios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-center">
+    <div class="form-card" style="border-top: 5px solid #e74c3c;">
+        
+        <div class="form-header">
+            <div class="header-icon" style="color: #e74c3c;">⚠️</div>
+            <h2>
+                {% if es_edicion %}
+                    Editando Registro de Multa
+                {% else %}
+                    Registro de Nueva Multa
+                {% endif %}
+            </h2>
+            <div class="form-badge">
+                {{ cliente.nombre_cliente }} — {{ pais.nombre_pais }}
+            </div>
+        </div>
+
+        <form method="POST" class="main-form">
+            {% csrf_token %}
+            
+            <fieldset class="form-section">
+                <legend>📅 Contexto de la Multa</legend>
+                <div class="form-grid-3">
+                    <div class="form-group">
+                        <label>Mes:</label>
+                        {{ form.mes }}
+                    </div>
+                    <div class="form-group">
+                        <label>Año:</label>
+                        {{ form.anio }}
+                    </div>
+                    <div class="form-group">
+                        <label>Servicio Afectado:</label>
+                        {{ form.servicio }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>💰 Monto y Detalle</legend>
+                <div class="form-group" style="max-width: 300px; margin-bottom: 1.5rem;">
+                    <label>Monto de la Multa (USD):</label>
+                    {{ form.monto_multa }}
+                </div>
+                <div class="form-group">
+                    <label>Descripción / Justificación:</label>
+                    {{ form.descripcion_multa }}
+                    <small style="color: #666;">Indique brevemente el motivo de la penalización.</small>
+                </div>
+            </fieldset>
+
+            {{ form.id_pais }}
+            {{ form.id_cliente }}
+
+            <div class="form-actions">
+                <button type="submit" class="btn-save" style="background-color: #e74c3c;">
+                    💾 {% if es_edicion %}Actualizar Multa{% else %}Guardar Multa{% endif %}
+                </button>
+                <a href="{% url 'gestion_multas' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

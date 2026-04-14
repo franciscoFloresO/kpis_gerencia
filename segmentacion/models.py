@@ -14,6 +14,9 @@ class UsuarioApp(models.Model):
     last_login = models.DateTimeField(db_column='ultimo_acceso', null=True, blank=True)
     fecha_modificacion = models.DateTimeField(auto_now=True, null=True)
 
+    fs = models.BooleanField(default=False, db_column='fs')
+    sd = models.BooleanField(default=False, db_column='sd')
+
     # Propiedades de compatibilidad con Django
     @property
     def is_authenticated(self):

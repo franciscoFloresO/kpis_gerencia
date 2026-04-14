@@ -18,15 +18,30 @@
         <section class="action-card highlight">
             <div class="card-body">
                 <h3>📋 Gestión de Registros</h3>
-                <div class="button-group">
+                
+                <p style="margin-bottom: 5px; font-size: 0.85em; color: #666;"><strong>Service Desk (SD)</strong></p>
+                <div class="button-group" style="margin-bottom: 15px;">
                     <a href="{% url 'lista_operaciones' %}" class="btn-action btn-grey">
-                        <span class="icon">📂</span> Historial Operaciones →
+                        <span class="icon">📂</span> Historial Operaciones SD →
                     </a>
                     <a href="{% url 'lista_contractual' %}" class="btn-action btn-dark">
-                        <span class="icon">📄</span> Historial Contractual →
+                        <span class="icon">📄</span> Historial Contractual SD →
                     </a>
                 </div>
-                <p class="card-note">* Vista de acceso: <strong>{% if user.es_administrador_global %}Global{% else %}Personal{% endif %}</strong></p>
+
+                <p style="margin-bottom: 5px; font-size: 0.85em; color: #666;"><strong>Field Services (FS)</strong></p>
+                <div class="button-group">
+                    <a href="{% url 'lista_operaciones_fs' %}" class="btn-action btn-grey">
+                        <span class="icon">📂</span> Historial Operaciones FS →
+                    </a>
+                    <a href="{% url 'lista_contractual_fs' %}" class="btn-action btn-dark">
+                        <span class="icon">📄</span> Historial Contractual FS →
+                    </a>
+                </div>
+
+                <p class="card-note" style="margin-top: 15px;">
+                    * Vista de acceso: <strong>{% if user.es_administrador_global %}Global{% else %}Personal{% endif %}</strong>
+                </p>
             </div>
         </section>
 
@@ -37,6 +52,12 @@
             <div class="card-body">
                 <form action="{% url 'redireccionar_carga' 'operacion' %}" method="POST" class="inline-form">
                     {% csrf_token %}
+                    <label>Tipo de Servicio:</label>
+                    <select name="tipo_servicio" required style="margin-bottom: 10px; width: 100%;">
+                        <option value="SD">Service Desk</option>
+                        <option value="FS">Field Services</option>
+                    </select>
+
                     <label>Seleccione la asignación:</label>
                     <div class="form-row">
                         <select name="asignacion_id" required>
@@ -60,6 +81,13 @@
             <div class="card-body">
                 <form action="{% url 'redireccionar_carga' 'contractual' %}" method="POST" class="inline-form">
                     {% csrf_token %}
+                    
+                    <label>Tipo de Servicio:</label>
+                    <select name="tipo_servicio" required style="margin-bottom: 10px; width: 100%;">
+                        <option value="SD">Service Desk</option>
+                        <option value="FS">Field Services</option>
+                    </select>
+
                     <label>Seleccione la asignación:</label>
                     <div class="form-row">
                         <select name="asignacion_id" required>

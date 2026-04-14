@@ -36,6 +36,7 @@ def logout_view(request):
     return redirect('login')
 
 #USUARIOS
+@admin_required
 @login_required
 def crear_usuario(request):
     if request.method == 'POST':
@@ -57,11 +58,13 @@ def crear_usuario(request):
         form = UsuarioAppForm()
     return render(request, 'segmentacion/crear_usuario.html', {'form': form})
 
+@admin_required
 @login_required
 def lista_usuarios(request):
     usuarios = UsuarioApp.objects.all()
     return render(request, 'segmentacion/lista_usuarios.html', {'usuarios':usuarios})
 
+@admin_required
 @login_required
 def editar_usuario(request, id_usuario):
     usuario_obj = get_object_or_404(UsuarioApp, pk=id_usuario)

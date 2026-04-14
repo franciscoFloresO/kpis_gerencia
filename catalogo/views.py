@@ -5,8 +5,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import ClienteForm, PaisForm
 from .models import Cliente, Pais
+from .decorators import admin_required
 
-
+@admin_required
 @login_required
 def lista_clientes(request):
     if not request.user.es_administrador_global:
@@ -19,6 +20,7 @@ def lista_clientes(request):
         'clientes': clientes
     })
 
+@admin_required
 @login_required
 def crear_cliente(request):
     # Verificamos que sea administrador (usando el campo de tu UsuarioApp)
@@ -37,6 +39,7 @@ def crear_cliente(request):
 
     return render(request, 'catalogo/form_cliente.html', {'form': form})
 
+@admin_required
 @login_required
 def editar_cliente(request, pk):
     if not request.user.es_administrador_global:
@@ -59,7 +62,7 @@ def editar_cliente(request, pk):
         'es_edicion': True # Para cambiar el título en el HTML
     })
 
-
+@admin_required
 @login_required
 def lista_paises(request):
     if not request.user.es_administrador_global:
@@ -67,6 +70,7 @@ def lista_paises(request):
     paises = Pais.objects.all().order_by('nombre_pais')
     return render(request, 'catalogo/lista_paises.html', {'paises': paises})
 
+@admin_required
 @login_required
 def crear_pais(request):
     if not request.user.es_administrador_global:
@@ -81,6 +85,7 @@ def crear_pais(request):
         form = PaisForm()
     return render(request, 'catalogo/form_pais.html', {'form': form, 'es_edicion': False})
 
+@admin_required
 @login_required
 def editar_pais(request, pk):
     if not request.user.es_administrador_global:

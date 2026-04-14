@@ -38,8 +38,7 @@ class OperacionMensualForm(forms.ModelForm):
         super(OperacionMensualForm, self).__init__(*args, **kwargs)
 
         if self.instance and self.instance.pk:
-            if self.instance.porcentaje_digitalizacion is not None:
-                self.initial['porcentaje_digitalizacion'] = float(self.instance.porcentaje_digitalizacion) * 100
+            self.initial['porcentaje_digitalizacion'] = self.instance.digitalizacion_display
         
 
         self.fields['id_pais'].widget = forms.HiddenInput()
@@ -130,8 +129,7 @@ class OperacionMensualFSForm(forms.ModelForm):
         super(OperacionMensualFSForm, self).__init__(*args, **kwargs)
 
         if self.instance and self.instance.pk:
-            if self.instance.porcentaje_digitalizacion is not None:
-                self.initial['porcentaje_digitalizacion'] = float(self.instance.porcentaje_digitalizacion) * 100
+            self.initial['porcentaje_digitalizacion'] = self.instance.digitalizacion_display
         
 
         # Campos ocultos para mantener consistencia con el selector del Home
@@ -259,9 +257,8 @@ class ContractualMensualForm(forms.ModelForm):
             self.fields['anio'].required = False
 
             for campo in self.CAMPOS_PORCENTUALES:
-                valor_db = getattr(self.instance, campo)
-                if valor_db is not None:
-                    self.initial[campo] = float(valor_db) * 100
+                nombre_propiedad = campo.replace('_objetivo','_display')
+                self.initial[campo] = getattr(self.instance, nombre_propiedad)
 
         # Validadores de valores mínimos
         campos_min_cero = [
@@ -355,9 +352,8 @@ class ContractualMensualFSForm(forms.ModelForm):
             self.fields['anio'].required = False
 
             for campo in self.CAMPOS_PORCENTUALES:
-                valor_db = getattr(self.instance, campo)
-                if valor_db is not None:
-                    self.initial[campo] = float(valor_db) * 100
+                nombre_propiedad = campo.replace('_objetivo','_display')
+                self.initial[campo] = getattr(self.instance, nombre_propiedad)
 
         # Validadores de valores mínimos (ajustado a los nombres del modelo FS)
         campos_min_cero = [
@@ -415,6 +411,7 @@ class MultaForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         self.fields['id_pais'].widget = forms.HiddenInput()
         self.fields['id_cliente'].widget = forms.HiddenInput()
@@ -424,6 +421,18 @@ class MultaForm(forms.ModelForm):
             self.fields['anio'].disabled = True
             self.fields['mes'].initial = self.instance.fecha_periodo.month
             self.fields['anio'].initial = self.instance.fecha_periodo.year
+        
+        if user and not user.es_administrador_global:
+            opciones_permitidas = []
+
+            if user.sd:
+                opciones_permitidas.append(('Service Desk','Service Desk'))
+            if user.fs:
+                opciones_permitidas.append(('Field Service','Field Service'))
+            if opciones_permitidas:
+                self.fields['servicio'].choices = opciones_permitidas
+            else:
+                self.fields['servicio'].choices = [('','Sin servicios asignados')]
 
     def clean(self):
         cleaned_data = super().clean()

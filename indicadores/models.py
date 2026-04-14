@@ -28,6 +28,10 @@ class OperacionMensual(models.Model):
     modificado_por = models.ForeignKey(UsuarioApp,on_delete=models.PROTECT,db_column='modificado_por',related_name='operaciones_modificadas',null=True,blank=True)
     fecha_modificacion = models.DateTimeField(auto_now=True, null=True,blank=True)
 
+    @property
+    def digitalizacion_display(self):
+        return int(self.porcentaje_digitalizacion * 100) if self.porcentaje_digitalizacion else 0
+
     class Meta:
         managed = False
         db_table = 'kpi.OperacionMensual'
@@ -62,6 +66,10 @@ class OperacionMensualFS(models.Model):
 
     modificado_por = models.ForeignKey(UsuarioApp, on_delete=models.PROTECT, db_column='modificado_por', related_name='operaciones_fs_modificados', null=True, blank=True)
     fecha_modificacion = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    @property
+    def digitalizacion_display(self):
+        return int(self.porcentaje_digitalizacion * 100) if self.porcentaje_digitalizacion else 0
 
     class Meta:
         managed = False
@@ -100,6 +108,22 @@ class ContractualMensual(models.Model):
     modificado_por = models.ForeignKey(UsuarioApp,on_delete=models.PROTECT,db_column='modificado_por',related_name='contractuales_modificados',null=True,blank=True)
     fecha_contrato_modificacion = models.DateField(db_column='fecha_contrato_modificacion')
 
+    @property
+    def sla_display(self):
+        return int(self.sla_objetivo * 100) if self.sla_objetivo else 0
+
+    @property
+    def epa_display(self):
+        return int(self.epa_objetivo * 100) if self.epa_objetivo else 0
+
+    @property
+    def fcr_display(self):
+        return int(self.fcr_objetivo * 100) if self.fcr_objetivo else 0
+
+    @property
+    def abandono_display(self):
+        return int(self.abandono_objetivo * 100) if self.abandono_objetivo else 0
+    
     class Meta:
         managed = False
         db_table = 'kpi.ContractualMensual'
@@ -138,6 +162,22 @@ class ContractualMensualFS(models.Model):
 
     modificado_por = models.ForeignKey(UsuarioApp, on_delete=models.PROTECT, db_column='modificado_por', related_name='contractuales_fs_modificados', null=True, blank=True)
     fecha_contrato_modificacion = models.DateField(db_column='fecha_contrato_modificacion')
+
+    @property
+    def sla_display(self):
+        return int(self.sla_objetivo * 100) if self.sla_objetivo else 0
+
+    @property
+    def epa_display(self):
+        return int(self.epa_objetivo * 100) if self.epa_objetivo else 0
+
+    @property
+    def fcr_display(self):
+        return int(self.fcr_objetivo * 100) if self.fcr_objetivo else 0
+
+    @property
+    def abandono_display(self):
+        return int(self.abandono_objetivo * 100) if self.abandono_objetivo else 0
 
     class Meta:
         managed = False

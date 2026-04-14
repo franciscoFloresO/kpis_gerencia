@@ -8,10 +8,33 @@
         {% if user.is_authenticated %}
             <div class="nav-divider"></div>
             <ul class="nav-links">
-                <li><a href="{% url 'home' %}" class="nav-item">🏠 Inicio</a></li>
-                <li><a href="{% url 'lista_operaciones' %}" class="nav-item">📂 Operaciones</a></li>
-                <li><a href="{% url 'lista_contractual' %}" class="nav-item">📄 Contractual</a></li>
-                <li><a href="{% url 'gestion_multas' %}" class="nav-item">⚠️ Multas</a></li>
+                {% if user.sd or user.fs or user.es_administrador_global %}
+                    <li class="nav-dropdown">
+                        <a href="#" class="nav-item dropdown-toggle">📂 Operaciones <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            {% if user.sd or user.es_administrador_global %}
+                                <li><a href="{% url 'lista_operaciones' %}">Service Desk (SD)</a></li>
+                            {% endif %}
+                            {% if user.fs or user.es_administrador_global %}
+                                <li><a href="{% url 'lista_operaciones_fs' %}">Field Services (FS)</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <li class="nav-dropdown">
+                        <a href="#" class="nav-item dropdown-toggle">📄 Contractual <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            {% if user.sd or user.es_administrador_global %}
+                                <li><a href="{% url 'lista_contractual' %}">Service Desk (SD)</a></li>
+                            {% endif %}
+                            {% if user.fs or user.es_administrador_global %}
+                                <li><a href="{% url 'lista_contractual_fs' %}">Field Services (FS)</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <li><a href="{% url 'gestion_multas' %}" class="nav-item">⚠️ Multas</a></li>
+                {% endif %}
             </ul>
         {% endif %}
     </div>
@@ -20,18 +43,12 @@
         {% if user.is_authenticated %}
             <div class="user-profile">
                 <span class="user-name">👤 {{ user.nombre_completo }}</span>
-                
                 {% if user.es_administrador_global %}
                     <a href="{% url 'lista_usuarios' %}" class="nav-item admin-link" title="Gestión de Usuarios">
                         ⚙️ <span class="hide-mobile">Usuarios</span>
                     </a>
                 {% endif %}
-                
                 <a href="{% url 'logout' %}" class="btn-logout">Salir</a>
-            </div>
-        {% else %}
-            <div class="nav-guest">
-                <span class="welcome-text">Bienvenido al Portal</span>
             </div>
         {% endif %}
     </div>

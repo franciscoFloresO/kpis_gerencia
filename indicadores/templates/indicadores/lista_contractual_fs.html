@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Historial de Metas Contractuales FS{% endblock %}
+{% block title %}Historial de Datos Contractuales FS{% endblock %}
 
 {% block content %}
 <div class="form-card" style="max-width: 1200px;"> 
     <div class="form-header">
-        <h2>📋 Historial de Metas Contractuales (FS)</h2>
+        <h2>📋 Historial de datos Contractuales (FS)</h2>
         <div class="form-badge">
             {% if user.es_administrador_global %}
                 Vista: Administrador Global (Field Services)
             {% else %}
-                Vista: Mis Metas FS Cargadas
+                Vista: Cargas de Field Services
             {% endif %}
         </div>
     </div>
@@ -38,9 +38,9 @@
                         {{ c.id_cliente.nombre_cliente }}<br>
                         <small style="color: #666;">{{ c.id_pais.nombre_pais }}</small>
                     </td>
-                    <td style="padding: 12px; text-align: center;">{{ c.sla_objetivo }}%</td>
-                    <td style="padding: 12px; text-align: center;">{{ c.epa_objetivo }}%</td>
-                    <td style="padding: 12px; text-align: center;">{{ c.fcr_objetivo }}%</td>
+                    <td style="padding: 12px; text-align: center;">{{ c.sla_display }}%</td>
+                    <td style="padding: 12px; text-align: center;">{{ c.epa_display }}%</td>
+                    <td style="padding: 12px; text-align: center;">{{ c.fcr_display }}%</td>
                     <td style="padding: 12px;">
                         <div style="font-size: 0.8em; line-height: 1.2;">
                             <span>👤 {{ c.creado_por.nombre_completo }}</span><br>

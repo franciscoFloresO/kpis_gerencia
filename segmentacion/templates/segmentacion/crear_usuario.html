@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="container-center">
-    <div class="form-card" style="max-width: 600px;"> <div class="form-header">
+    <div class="form-card" style="max-width: 650px;"> <div class="form-header">
             <div class="header-icon">👤</div>
             <h2>
                 {% if es_edicion %}
@@ -44,33 +44,52 @@
                 </div>
 
                 {% if not es_edicion %}
-                <div class="form-group">
-                    <label>Contraseña Inicial:</label>
-                    {{ form.password }}
-                </div>
-                <div class="form-group">
-                    <label>Confirmar Contraseña:</label>
-                    {{ form.password_confirm }}
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Contraseña Inicial:</label>
+                        {{ form.password }}
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Contraseña:</label>
+                        {{ form.password_confirm }}
+                    </div>
                 </div>
                 {% endif %}
             </fieldset>
 
             <fieldset class="form-section">
                 <legend>⚙️ Configuración de Cuenta</legend>
-                <div class="form-grid-2">
-                    <div class="form-check-group">
+                
+                <div class="form-grid-2 grid-gap-lg">
+                    
+                    <div class="check-card-variant">
+                        <label class="checkbox-container">
+                            {{ form.sd }}
+                            <span class="checkbox-label">Service Desk (SD)</span>
+                        </label>
+                    </div>
+
+                    <div class="check-card-variant">
+                        <label class="checkbox-container">
+                            {{ form.fs }}
+                            <span class="checkbox-label">Field Services (FS)</span>
+                        </label>
+                    </div>
+
+                    <div class="check-card-variant">
                         <label class="checkbox-container">
                             {{ form.estado_activo }}
                             <span class="checkbox-label">Usuario Activo</span>
                         </label>
                     </div>
-                    
-                    <div class="form-check-group">
+
+                    <div class="check-card-variant">
                         <label class="checkbox-container">
                             {{ form.es_administrador_global }}
-                            <span class="checkbox-label">Administrador Global</span>
+                            <span class="checkbox-label">Admin Global</span>
                         </label>
                     </div>
+
                 </div>
             </fieldset>
 

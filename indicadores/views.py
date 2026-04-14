@@ -235,6 +235,9 @@ def editar_operacion_fs(request, pk):
 
 @login_required(login_url='login')
 def lista_operaciones(request):
+    if not request.user.sd and not request.user.es_administrador_global:
+        messages.error(request, "No tienes permisos para ver este panel.")
+        return redirect('home')
     if request.user.es_administrador_global:
         queryset=OperacionMensual.objects.all()
     else:
@@ -252,6 +255,9 @@ def lista_operaciones(request):
 
 @login_required(login_url='login')
 def lista_operaciones_fs(request):
+    if not request.user.fs and not request.user.es_administrador_global:
+        messages.error(request, "No tienes permisos para ver este panel.")
+        return redirect('home')
     if request.user.es_administrador_global:
         queryset = OperacionMensualFS.objects.all()
     else:
@@ -322,6 +328,9 @@ def editar_contractual_fs(request, pk):
 
 @login_required(login_url='login')
 def lista_contractual(request):
+    if not request.user.sd and not request.user.es_administrador_global:
+        messages.error(request,"No tienes permisos para ver este panel.")
+        return redirect('home')
     if request.user.es_administrador_global:
         queryset = ContractualMensual.objects.all()
     else:
@@ -340,6 +349,9 @@ def lista_contractual(request):
 
 @login_required(login_url='login')
 def lista_contractual_fs(request):
+    if not request.user.fs and not request.user.es_administrador_global:
+        messages.error(request,'No tienes permisos para ver este panel')
+        return redirect('home')
     if request.user.es_administrador_global:
         queryset = ContractualMensualFS.objects.all()
     else:
@@ -361,27 +373,31 @@ def lista_contractual_fs(request):
 def redireccionar_carga(request, tipo):
     if request.method == 'POST':
         combo = request.POST.get('asignacion_id')
-        tipo_servicio = request.POST.get('tipo_servicio') # Captura SD o FS
+        tipo_servicio = request.POST.get('tipo_servicio') # SD o FS
         
         if not combo:
             return redirect('home')
             
+        if not request.user.es_administrador_global:
+            if tipo_servicio == 'SD' and not request.user.sd:
+                messages.error(request, "No tienes permisos para cargar datos de Service Desk.")
+                return redirect('home')
+            if tipo_servicio == 'FS' and not request.user.fs:
+                messages.error(request, "No tienes permisos para cargar datos de Field Services.")
+                return redirect('home')
+
         pais_id, cliente_id = combo.split('-')
         
         if tipo == 'operacion':
-            # Decide entre la vista clásica (SD) o la nueva (FS)
             nombre_url = 'cargar_operacion_fs' if tipo_servicio == 'FS' else 'cargar_operacion'
             return redirect(nombre_url, id_cliente=cliente_id, id_pais=pais_id)
             
         elif tipo == 'contractual':
-            # Decide entre la vista clásica (SD) o la nueva (FS)
             nombre_url = 'cargar_contractual_fs' if tipo_servicio == 'FS' else 'cargar_contractual'
             return redirect(nombre_url, id_cliente=cliente_id, id_pais=pais_id)
-        
+
         elif tipo == 'multa':
-            # Para multas usamos una vista única, ya que el servicio se elige dentro del form
             return redirect('cargar_multa', id_cliente=cliente_id, id_pais=pais_id)
-        
             
     return redirect('home')
 
@@ -394,7 +410,7 @@ def cargar_multa(request, id_cliente, id_pais):
     pais_obj = get_object_or_404(Pais, pk=id_pais)
 
     if request.method == 'POST':
-        form = MultaForm(request.POST)
+        form = MultaForm(request.POST, user=request.user)
         if form.is_valid():
             multa = form.save(commit=False)
             
@@ -414,7 +430,7 @@ def cargar_multa(request, id_cliente, id_pais):
                     label = form.fields[field].label if field in form.fields else field
                     messages.error(request, f"Error en {label}: {error}")
     else:
-        form = MultaForm(initial={
+        form = MultaForm(user=request.user, initial={
             'id_cliente': cliente_obj, 
             'id_pais': pais_obj
         })
@@ -457,7 +473,7 @@ def editar_multa(request, pk):
 
     if request.method == 'POST':
         # Pasamos la instancia al formulario
-        form = MultaForm(request.POST, instance=multa)
+        form = MultaForm(request.POST, user=request.user,  instance=multa)
         if form.is_valid():
             multa_editada = form.save(commit=False)
             
@@ -475,7 +491,7 @@ def editar_multa(request, pk):
                     messages.error(request, f"Error en {label}: {error}")
     else:
         # Al ser GET, el __init__ del formulario cargará mes y año desde fecha_periodo
-        form = MultaForm(instance=multa)
+        form = MultaForm(user=request.user, instance=multa)
 
     return render(request, 'indicadores/form_multa.html', {
         'form': form,

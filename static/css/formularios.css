@@ -63,12 +63,15 @@
 .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
 
 /* Grupos de Input */
+.form-group {
+    margin-bottom: 1rem;
+}
 .form-group label {
     display: block;
     font-size: 0.85em;
     font-weight: 600;
     color: #444;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .form-group input, 
@@ -165,4 +168,27 @@
     color: #6c757d;
     font-size: 0.9em;
     margin-top: -5px;
+}
+
+
+.grid-gap-lg {
+    gap: 1.5rem; /* Aumenta el espacio entre tarjetas */
+    margin-top: 10px;
+}
+
+/* Una variante de tu form-check-group con más padding y hover */
+.check-card-variant {
+    display: flex;
+    align-items: center;
+    padding: 15px; /* Más espacio interno */
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.check-card-variant:hover {
+    border-color: #007bff;
+    background-color: #f8fbff;
 }

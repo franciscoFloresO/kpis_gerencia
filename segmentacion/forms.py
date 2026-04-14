@@ -23,8 +23,14 @@ class UsuarioAppForm(forms.ModelForm):
             'correo_corporativo',
             'password',
             'es_administrador_global',
-            'estado_activo'
+            'estado_activo',
+            'fs',
+            'sd'
         ]
+        labels = {
+            'sd': 'Service Desk (SD)',
+            'fs': 'Field Services (FS)',
+        }
     #Listado para dar orden en el formulario del html    
     field_order = [
         'usuario_login', 
@@ -33,7 +39,9 @@ class UsuarioAppForm(forms.ModelForm):
         'password', 
         'password_confirm', 
         'es_administrador_global',
-        'estado_activo'
+        'estado_activo',
+        'fs',
+        'sd'
     ]
 
     #Función para no aceptar cualquier tipo de correo y solo alguno de sonda.

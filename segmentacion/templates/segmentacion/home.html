@@ -19,29 +19,21 @@
             <div class="card-body">
                 <h3>📋 Gestión de Registros</h3>
                 
+                {% if user.sd or user.es_administrador_global %}
                 <p style="margin-bottom: 5px; font-size: 0.85em; color: #666;"><strong>Service Desk (SD)</strong></p>
                 <div class="button-group" style="margin-bottom: 15px;">
-                    <a href="{% url 'lista_operaciones' %}" class="btn-action btn-grey">
-                        <span class="icon">📂</span> Historial Operaciones SD →
-                    </a>
-                    <a href="{% url 'lista_contractual' %}" class="btn-action btn-dark">
-                        <span class="icon">📄</span> Historial Contractual SD →
-                    </a>
+                    <a href="{% url 'lista_operaciones' %}" class="btn-action btn-grey">📂 Historial Operaciones SD →</a>
+                    <a href="{% url 'lista_contractual' %}" class="btn-action btn-dark">📄 Historial Contractual SD →</a>
                 </div>
+                {% endif %}
 
+                {% if user.fs or user.es_administrador_global %}
                 <p style="margin-bottom: 5px; font-size: 0.85em; color: #666;"><strong>Field Services (FS)</strong></p>
                 <div class="button-group">
-                    <a href="{% url 'lista_operaciones_fs' %}" class="btn-action btn-grey">
-                        <span class="icon">📂</span> Historial Operaciones FS →
-                    </a>
-                    <a href="{% url 'lista_contractual_fs' %}" class="btn-action btn-dark">
-                        <span class="icon">📄</span> Historial Contractual FS →
-                    </a>
+                    <a href="{% url 'lista_operaciones_fs' %}" class="btn-action btn-grey">📂 Historial Operaciones FS →</a>
+                    <a href="{% url 'lista_contractual_fs' %}" class="btn-action btn-dark">📄 Historial Contractual FS →</a>
                 </div>
-
-                <p class="card-note" style="margin-top: 15px;">
-                    * Vista de acceso: <strong>{% if user.es_administrador_global %}Global{% else %}Personal{% endif %}</strong>
-                </p>
+                {% endif %}
             </div>
         </section>
 
@@ -54,8 +46,12 @@
                     {% csrf_token %}
                     <label>Tipo de Servicio:</label>
                     <select name="tipo_servicio" required style="margin-bottom: 10px; width: 100%;">
-                        <option value="SD">Service Desk</option>
-                        <option value="FS">Field Services</option>
+                        {% if user.sd or user.es_administrador_global %}
+                            <option value="SD">Service Desk</option>
+                        {% endif %}
+                        {% if user.fs or user.es_administrador_global %}
+                            <option value="FS">Field Services</option>
+                        {% endif %}
                     </select>
 
                     <label>Seleccione la asignación:</label>
@@ -84,8 +80,12 @@
                     
                     <label>Tipo de Servicio:</label>
                     <select name="tipo_servicio" required style="margin-bottom: 10px; width: 100%;">
-                        <option value="SD">Service Desk</option>
-                        <option value="FS">Field Services</option>
+                        {% if user.sd or user.es_administrador_global %}
+                            <option value="SD">Service Desk</option>
+                        {% endif %}
+                        {% if user.fs or user.es_administrador_global %}
+                            <option value="FS">Field Services</option>
+                        {% endif %}
                     </select>
 
                     <label>Seleccione la asignación:</label>

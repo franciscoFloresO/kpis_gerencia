@@ -238,8 +238,18 @@ def lista_operaciones(request):
     if not request.user.sd and not request.user.es_administrador_global:
         messages.error(request, "No tienes permisos para ver este panel.")
         return redirect('home')
+
     if request.user.es_administrador_global:
         queryset=OperacionMensual.objects.all()
+
+    elif request.user.es_gerente_pais:
+        paises_asignados = UsuarioClientePais.objects.filter(
+            usuario=request.user,
+            cliente__isnull=True,
+            estado_activo=True
+        ).values_list('pais_id', flat=True)
+
+        queryset = OperacionMensual.objects.filter(id_pais__in=paises_asignados)
     else:
         queryset=OperacionMensual.objects.filter(creado_por=request.user)
 

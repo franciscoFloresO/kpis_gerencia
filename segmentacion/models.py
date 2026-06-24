@@ -8,6 +8,7 @@ class UsuarioApp(models.Model):
     nombre_completo = models.CharField(max_length=200)
     correo_corporativo = models.EmailField(max_length=200, unique=True)
     es_administrador_global = models.BooleanField(default=False)
+    es_gerente_pais = models.BooleanField(default=False, db_column='es_gerente_pais')
     estado_activo = models.BooleanField(default=True)
     
     fecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -41,7 +42,7 @@ class UsuarioClientePais(models.Model):
     id = models.AutoField(primary_key=True,db_column='id_usuario_cliente_pais')
     
     usuario = models.ForeignKey(UsuarioApp, on_delete=models.CASCADE, db_column='id_usuario')
-    cliente = models.ForeignKey('catalogo.Cliente', on_delete=models.CASCADE, db_column='id_cliente')
+    cliente = models.ForeignKey('catalogo.Cliente', on_delete=models.CASCADE, db_column='id_cliente', null=True, blank=True)
     pais = models.ForeignKey('catalogo.Pais', on_delete=models.CASCADE, db_column='id_pais')
     
     estado_activo = models.BooleanField(default=True)

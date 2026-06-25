@@ -91,7 +91,7 @@ def editar_usuario(request, id_usuario):
 @admin_required # Tu decorador de seguridad
 def gestionar_asignaciones(request, id_usuario):
     usuario_obj = get_object_or_404(UsuarioApp, pk=id_usuario)
-    asignaciones = UsuarioClientePais.objects.filter(usuario=usuario_obj).select_related('pais', 'cliente')
+    asignaciones = UsuarioClientePais.objects.filter(usuario=usuario_obj).select_related('pais')
 
     if request.method == 'POST':
         form = AsignacionForm(request.POST, usuario=usuario_obj)
@@ -100,13 +100,15 @@ def gestionar_asignaciones(request, id_usuario):
             nueva_asig.usuario = usuario_obj
             nueva_asig.estado_activo = True
             nueva_asig.save()
-            
-            # Mensaje de éxito para la esquina
-            messages.success(request, f"Asignación de {nueva_asig.cliente} agregada correctamente.")
+
+            if nueva_asig.cliente_id is not None:
+                nueva_asig = UsuarioClientePais.objects.select_related('cliente', 'pais').get(pk=nueva_asig.pk)
+                mensaje =f"Asignación de {nueva_asig.cliente.nombre_cliente} ({nueva_asig.pais.nombre_pais}) agregada correctamente "
+            else:
+                mensaje =f"Acceso global a {nueva_asig.pais.nombre_pais} (Nivel País) agregada correctamente"
+            messages.success(request, mensaje)
             return redirect('gestionar_asignaciones', id_usuario=id_usuario)
         else:
-            # PUENTE DE ERRORES:
-            # Enviamos los errores del formulario al sistema de mensajes
             for error in form.non_field_errors():
                 messages.error(request, error)
             
@@ -114,7 +116,8 @@ def gestionar_asignaciones(request, id_usuario):
             for field, field_errors in form.errors.items():
                 if field != '__all__':
                     for error in field_errors:
-                        messages.error(request, f"{field.capitalize()}: {error}")
+                        nombre_campo = "Cliente" if field == 'cliente'else "País"
+                        messages.error(request, f"{nombre_campo}: {error}")
     else:
         form = AsignacionForm(usuario=usuario_obj)
 
@@ -123,6 +126,7 @@ def gestionar_asignaciones(request, id_usuario):
         'asignaciones': asignaciones,
         'form': form
     })
+
 # Vista rápida para eliminar (desactivar) una asignación
 @login_required
 @admin_required

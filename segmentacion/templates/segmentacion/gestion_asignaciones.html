@@ -53,12 +53,22 @@
                     {% for a in asignaciones %}
                     <tr>
                         <td><strong>{{ a.pais.nombre_pais }}</strong></td>
-                        <td>{{ a.cliente.nombre_cliente }}</td>
+                        
+                        <td>
+                            {% if a.cliente %}
+                                {{ a.cliente.nombre_cliente }}
+                            {% else %}
+                                <span class="badge-global" style="background-color: #28a745; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; display: inline-block;">
+                                    🌍 Todo el País (Acceso Global)
+                                </span>
+                            {% endif %}
+                        </td>
+
                         <td class="text-center">
                             <a href="{% url 'eliminar_asignacion' a.id %}" 
-                               class="btn-delete" 
-                               onclick="return confirm('¿Está seguro de quitar este permiso?')">
-                               Quitar
+                                class="btn-delete" 
+                                onclick="return confirm('¿Está seguro de quitar este permiso?')">
+                                Quitar
                             </a>
                         </td>
                     </tr>

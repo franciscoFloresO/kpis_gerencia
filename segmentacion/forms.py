@@ -23,6 +23,7 @@ class UsuarioAppForm(forms.ModelForm):
             'correo_corporativo',
             'password',
             'es_administrador_global',
+            'es_gerente_pais',
             'estado_activo',
             'fs',
             'sd'
@@ -30,6 +31,7 @@ class UsuarioAppForm(forms.ModelForm):
         labels = {
             'sd': 'Service Desk (SD)',
             'fs': 'Field Services (FS)',
+            'es_gerente_pais': 'Gerente País',
         }
     #Listado para dar orden en el formulario del html    
     field_order = [
@@ -39,6 +41,7 @@ class UsuarioAppForm(forms.ModelForm):
         'password', 
         'password_confirm', 
         'es_administrador_global',
+        'es_gerente_pais',
         'estado_activo',
         'fs',
         'sd'
@@ -93,6 +96,8 @@ class AsignacionForm(forms.ModelForm):
 
         self.fields['pais'].queryset = Pais.objects.filter(estado_activo=True).order_by('nombre_pais')
         self.fields['cliente'].queryset = Cliente.objects.filter(estado_activo=True).order_by('nombre_cliente')
+        self.fields['cliente'].required = False
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -100,16 +105,25 @@ class AsignacionForm(forms.ModelForm):
         cliente = cleaned_data.get("cliente")
 
         # Validamos si ya existe la combinación para este usuario
-        if self.usuario and pais and cliente:
-            existe = UsuarioClientePais.objects.filter(
-                usuario=self.usuario,
-                pais=pais,
-                cliente=cliente
-            ).exists()
-            
+        if self.usuario and pais:
+            if cliente:
+
+                existe = UsuarioClientePais.objects.filter(
+                    usuario=self.usuario,
+                    pais=pais,
+                    cliente=cliente
+                ).exists()
+            else:
+                existe = UsuarioClientePais.objects.filter(
+                    usuario=self.usuario,
+                    pais=pais,
+                    cliente__isnull=True
+                ).exists()
             if existe:
-                raise forms.ValidationError(
-                    f"Error: {pais} - {cliente} ya se encuentra asignado a este usuario."
-                )
+                if cliente:
+                    mensaje_error = f"Error: El cliente {cliente} en {pais} ya se encuentra asignado"
+                else:
+                    mensaje_error = f"Error: El acceso a {pais}, ya se encuentra asignado"
+                raise forms.ValidationError(mensaje_error)
         
         return cleaned_data

@@ -433,7 +433,7 @@ def cargar_multa(request, id_cliente, id_pais):
             multa.save()
             
             messages.success(request, f"Multa para {cliente_obj.nombre_cliente} registrada con éxito.")
-            return redirect('home')
+            return redirect('gestion_multas')
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -455,7 +455,7 @@ def cargar_multa(request, id_cliente, id_pais):
 @login_required(login_url='login')
 def gestion_multas(request):
     if request.user.es_administrador_global:
-        asignaciones = UsuarioClientePais.objects.filter(estado_activo=True).select_related('cliente', 'pais')
+        asignaciones = UsuarioClientePais.objects.filter(usuario=request.user, estado_activo=True).select_related('cliente', 'pais')
     else:
         asignaciones = UsuarioClientePais.objects.filter(
             usuario=request.user, 
